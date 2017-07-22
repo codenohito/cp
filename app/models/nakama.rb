@@ -1,0 +1,2 @@
+class Nakama < ApplicationRecord
+end
