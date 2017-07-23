@@ -1,0 +1,17 @@
+.holder
+  h1 New project
+  = form_for @project, html: { class: 'pure-form pure-form-stacked' } do |f|
+    fieldset
+      = f.label :name
+      = f.text_field :name
+      = f.label :client_ids
+      = f.select :client_ids, \
+        options_for_select(Client.all.collect { |clt| [clt.name, clt.id] }),
+        {},
+        multiple: true
+      = f.label :descr
+      = f.text_area :descr
+    fieldset
+      = f.submit 'Create new project'
+      br
+      small = link_to 'Cancel', projects_path

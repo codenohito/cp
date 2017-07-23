@@ -10,3 +10,10 @@
           - moment_format_str = "%e %b %y %H:%M"
         strong = l record.moment, format: moment_format_str
         == @markdown.render record.body
+
+  p &nbsp;
+  p Warning! Danger zone!
+  = link_to 'Destroy', project_path(@project),
+                       method: :delete,
+                       data: { confirm: 'Are you sure?' },
+                       class: 'pure-button'
