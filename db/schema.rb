@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170723064938) do
+ActiveRecord::Schema.define(version: 20170723082218) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,35 @@ ActiveRecord::Schema.define(version: 20170723064938) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_history_records_on_project_id"
+  end
+
+  create_table "money_accounts", force: :cascade do |t|
+    t.string "name"
+    t.text "descr"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "money_record_categories", force: :cascade do |t|
+    t.string "name"
+    t.integer "kind"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "money_records", force: :cascade do |t|
+    t.datetime "moment"
+    t.float "amount"
+    t.integer "kind"
+    t.integer "account_id"
+    t.integer "category_id"
+    t.bigint "nakama_id"
+    t.bigint "project_id"
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["nakama_id"], name: "index_money_records_on_nakama_id"
+    t.index ["project_id"], name: "index_money_records_on_project_id"
   end
 
   create_table "nakamas", force: :cascade do |t|
@@ -61,6 +90,8 @@ ActiveRecord::Schema.define(version: 20170723064938) do
   end
 
   add_foreign_key "history_records", "projects"
+  add_foreign_key "money_records", "nakamas"
+  add_foreign_key "money_records", "projects"
   add_foreign_key "time_records", "nakamas"
   add_foreign_key "time_records", "projects"
 end

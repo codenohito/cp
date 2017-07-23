@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  moment: 2017-07-23 15:22:18
+  amount: 1.5
+  kind: 1
+  account_id: 1
+  category_id: 1
+  nakama: one
+  project: one
+  comment: MyText
+
+two:
+  moment: 2017-07-23 15:22:18
+  amount: 1.5
+  kind: 1
+  account_id: 1
+  category_id: 1
+  nakama: two
+  project: two
+  comment: MyText

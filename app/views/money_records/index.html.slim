@@ -1,0 +1,52 @@
+.holder
+  h1 Money
+  = form_for MoneyRecord.new, url: { action: 'create' }, \
+                              html: { class: 'pure-form pure-form-stacked' } do |f|
+    fieldset
+      legend New money record:
+      = f.label :moment
+      = f.text_field :moment
+
+      = f.label :amount
+      = f.text_field :amount
+
+      = f.label :kind
+      = f.select :kind, options_for_select([['Расход', 0], ['Доход', 1]])
+
+      = f.label :account_id
+      = f.select :account_id, options_for_select(MoneyAccount.all.collect { |acn| [acn.name, acn.id] })
+
+      = f.label :category_id
+      = f.select :category_id, options_for_select(MoneyRecordCategory.all.collect { |mrc| [mrc.name, mrc.id] })
+
+      = f.label :nakama_id
+      = f.select :nakama_id, options_for_select(Nakama.all.collect { |nkm| [nkm.name, nkm.id] })
+
+      = f.label :project_id
+      = f.select :project_id, options_for_select(Project.all.collect { |prj| [prj.name, prj.id] })
+
+
+      = f.label :comment
+      = f.text_field :comment
+
+    = f.submit "Save"
+
+  ul
+    - @records.each do |record|
+      li
+        p
+          = l record.moment, format: :short
+          br
+          = record.kind == MoneyRecord::KIND_CONSUMPTION ? '-' : '+'
+          '
+          = "%g" % record.amount
+          br
+          = record.account.name
+          ' ,
+          = record.category.name
+          ' ,
+          = record.nakama.name
+          ' ,
+          = record.project.name
+          br
+          = record.comment
