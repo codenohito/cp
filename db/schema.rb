@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170722154147) do
+ActiveRecord::Schema.define(version: 20170723064938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,20 @@ ActiveRecord::Schema.define(version: 20170722154147) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "clients_projects", id: false, force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.bigint "project_id", null: false
+  end
+
+  create_table "history_records", force: :cascade do |t|
+    t.bigint "project_id"
+    t.datetime "moment"
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_history_records_on_project_id"
+  end
+
   create_table "nakamas", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -28,13 +42,25 @@ ActiveRecord::Schema.define(version: 20170722154147) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.bigint "client_id"
     t.string "name"
     t.text "descr"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["client_id"], name: "index_projects_on_client_id"
   end
 
-  add_foreign_key "projects", "clients"
+  create_table "time_records", force: :cascade do |t|
+    t.date "theday"
+    t.integer "amount"
+    t.bigint "nakama_id"
+    t.bigint "project_id"
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["nakama_id"], name: "index_time_records_on_nakama_id"
+    t.index ["project_id"], name: "index_time_records_on_project_id"
+  end
+
+  add_foreign_key "history_records", "projects"
+  add_foreign_key "time_records", "nakamas"
+  add_foreign_key "time_records", "projects"
 end

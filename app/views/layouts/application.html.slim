@@ -2,10 +2,18 @@ doctype html
 html
   head
     meta charset="utf8"
+    meta name="viewport" content="width=device-width, initial-scale=1"
     title = '{code}の人 CP'
     = csrf_meta_tags
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
 
   body
+    header
+      nav.pure-menu.pure-menu-horizontal
+        = link_to 'Dashboard', root_path, class: 'pure-menu-heading pure-menu-link'
+        ul.pure-menu-list
+          li.pure-menu-item = link_to 'Projects', projects_path, class: 'pure-menu-link'
+          li.pure-menu-item = link_to 'Timer', timer_path, class: 'pure-menu-link'
+
     = yield

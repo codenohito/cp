@@ -1,0 +1,12 @@
+.holder
+  h1 = @project.name
+  == @markdown.render @project.descr
+  h2 History
+  ul
+    - @history_records.each do |record|
+      li
+        - moment_format_str = "%e %b %y"
+        - if record.moment.hour != 0 || record.moment.min != 0
+          - moment_format_str = "%e %b %y %H:%M"
+        strong = l record.moment, format: moment_format_str
+        == @markdown.render record.body

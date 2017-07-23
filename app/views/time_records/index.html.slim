@@ -1,0 +1,26 @@
+.holder
+  h1 Timer
+  = form_for TimeRecord.new, url: { action: 'create' }, \
+                             html: { class: 'pure-form pure-form-stacked' } do |f|
+    fieldset
+      legend New time record:
+      = f.text_field :theday
+      = f.text_field :amount
+      = f.select :nakama_id, options_for_select(Nakama.all.collect { |nkm| [nkm.name, nkm.id] })
+      = f.select :project_id, options_for_select(Project.all.collect { |prj| [prj.name, prj.id] })
+      = f.text_field :comment
+      = f.submit "Save"
+
+  ul
+    - @records.each do |record|
+      li
+        p
+          = l record.theday, format: :short
+          br
+          = record.amount
+          ' ,
+          = record.nakama.name
+          ' ,
+          = record.project.name
+          br
+          = record.comment

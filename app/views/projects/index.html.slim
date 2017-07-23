@@ -1,0 +1,7 @@
+.holder
+  h1 Projects
+  - if @projects.any?
+    ul
+      - @projects.each do |project|
+        li
+          = link_to project.name, project_path(project)

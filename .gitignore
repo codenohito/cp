@@ -37,3 +37,5 @@
 /public/uploads/*
 /public/system/*
 /public/sitemap*
+
+/lib/tasks/dymio.rake

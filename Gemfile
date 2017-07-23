@@ -37,6 +37,9 @@ gem 'jbuilder', '~> 2.5'
 # Flexible authentication solution for Rails with Warden
 gem 'devise', '~> 4.3'
 
+# A fast, safe and extensible Markdown to (X)HTML parser
+gem 'redcarpet', '~> 3.4'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
