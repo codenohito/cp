@@ -15,36 +15,19 @@ ActiveRecord::Schema.define(version: 20170723082218) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "clients", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "clients_projects", id: false, force: :cascade do |t|
-    t.bigint "client_id", null: false
-    t.bigint "project_id", null: false
-  end
-
   create_table "history_records", force: :cascade do |t|
     t.bigint "project_id"
     t.datetime "moment"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["moment"], name: "index_history_records_on_moment"
     t.index ["project_id"], name: "index_history_records_on_project_id"
-  end
-
-  create_table "money_accounts", force: :cascade do |t|
-    t.string "name"
-    t.text "descr"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "money_record_categories", force: :cascade do |t|
     t.string "name"
-    t.integer "kind"
+    t.boolean "kind"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -52,14 +35,14 @@ ActiveRecord::Schema.define(version: 20170723082218) do
   create_table "money_records", force: :cascade do |t|
     t.datetime "moment"
     t.float "amount"
-    t.integer "kind"
-    t.integer "account_id"
-    t.integer "category_id"
+    t.boolean "kind"
+    t.bigint "category_id"
     t.bigint "nakama_id"
     t.bigint "project_id"
     t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["moment"], name: "index_money_records_on_moment"
     t.index ["nakama_id"], name: "index_money_records_on_nakama_id"
     t.index ["project_id"], name: "index_money_records_on_project_id"
   end
@@ -87,6 +70,7 @@ ActiveRecord::Schema.define(version: 20170723082218) do
     t.datetime "updated_at", null: false
     t.index ["nakama_id"], name: "index_time_records_on_nakama_id"
     t.index ["project_id"], name: "index_time_records_on_project_id"
+    t.index ["theday"], name: "index_time_records_on_theday"
   end
 
   add_foreign_key "history_records", "projects"

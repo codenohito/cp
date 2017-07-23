@@ -7,5 +7,7 @@ class CreateHistoryRecords < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
+
+    add_index :history_records, :moment
   end
 end

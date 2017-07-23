@@ -9,5 +9,7 @@ class CreateTimeRecords < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
+
+    add_index :time_records, :theday
   end
 end

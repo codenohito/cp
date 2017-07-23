@@ -17,4 +17,7 @@ html
           li.pure-menu-item = link_to 'Money', money_path, class: 'pure-menu-link'
           li.pure-menu-item = link_to 'Timer', timer_path, class: 'pure-menu-link'
 
+    - if flash[:alert].present?
+      p = flash[:alert]
+
     = yield

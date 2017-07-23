@@ -13,9 +13,6 @@
       = f.label :kind
       = f.select :kind, options_for_select([['Расход', 0], ['Доход', 1]])
 
-      = f.label :account_id
-      = f.select :account_id, options_for_select(MoneyAccount.all.collect { |acn| [acn.name, acn.id] })
-
       = f.label :category_id
       = f.select :category_id, options_for_select(MoneyRecordCategory.all.collect { |mrc| [mrc.name, mrc.id] })
 
@@ -41,8 +38,6 @@
           '
           = "%g" % record.amount
           br
-          = record.account.name
-          ' ,
           = record.category.name
           ' ,
           = record.nakama.name

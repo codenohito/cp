@@ -4,11 +4,6 @@
     fieldset
       = f.label :name
       = f.text_field :name
-      = f.label :client_ids
-      = f.select :client_ids, \
-        options_for_select(Client.all.collect { |clt| [clt.name, clt.id] }),
-        {},
-        multiple: true
       = f.label :descr
       = f.text_area :descr
     fieldset

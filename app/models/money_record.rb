@@ -1,16 +1,17 @@
 class MoneyRecord < ApplicationRecord
-  belongs_to :account, class_name: 'MoneyAccount'
-  belongs_to :category, class_name: 'MoneyRecordCategory'
+  belongs_to :category, class_name: 'MoneyRecordCategory', inverse_of: :records
+  belongs_to :nakama, inverse_of: :money_records
+  belongs_to :project, inverse_of: :money_records
 
-  belongs_to :nakama
-  belongs_to :project
+  KIND_CONSUMPTION = false
+  KIND_INCOME = true
 
-  KIND_CONSUMPTION = 0
-  KIND_INCOME = 1
-
-  after_initialize :set_default_moment
+  validates :moment, :amount, :category, presence: true
+  validates :kind, inclusion: [true, false]
 
   scope :ordered, -> { order(moment: :desc) }
+
+  after_initialize :set_default_moment
 
   private
 
