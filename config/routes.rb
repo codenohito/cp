@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   get 'money', to: 'money_records#index', as: :money
   post 'money', to: 'money_records#create'
 

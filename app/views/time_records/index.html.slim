@@ -6,7 +6,8 @@
       legend New time record:
       = f.text_field :theday
       = f.text_field :amount
-      = f.select :nakama_id, options_for_select(Nakama.all.collect { |nkm| [nkm.name, nkm.id] })
+      - if current_user.admin?
+        = f.select :nakama_id, options_for_select(Nakama.all.collect { |nkm| [nkm.name, nkm.id] })
       = f.select :project_id, options_for_select(Project.all.collect { |prj| [prj.name, prj.id] })
       = f.text_field :comment
       = f.submit "Save"

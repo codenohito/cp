@@ -1,4 +1,5 @@
 class ProjectsController < ApplicationController
+  before_action :authenticate_user!
 
   def index
     @projects = Project.ordered
@@ -31,8 +32,8 @@ class ProjectsController < ApplicationController
   end
 
   private
-    def project_params
-      params.require(:project).permit(:name, :descr)
-    end
 
+  def project_params
+    params.require(:project).permit(:name, :descr)
+  end
 end

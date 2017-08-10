@@ -27,6 +27,22 @@ nakamas = Nakama.create!([
   { name: "riceking" }
 ])
 
+User.create!([
+  {
+    email: 'admin@example.com',
+    password: 'password',
+    password_confirmation: 'password',
+    nakama: nakamas[0],
+    perms: 1
+  },
+  {
+    email: 'user@example.com',
+    password: 'password',
+    password_confirmation: 'password',
+    nakama: nakamas[1]
+  }
+])
+
 TimeRecord.create!([
   {
     theday: Date.today,
