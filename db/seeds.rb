@@ -6,34 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-projects = Project.create([
-  { name: "Codenohito", descr: 'Internal tasks' },
-  { name: "Svezhov", descr: 'Сайт компании «Свежов»' }
-])
-
-nakamas = Nakama.create([
-  { name: "dymio" },
-  { name: "riceking" }
-])
-
-TimeRecord.create([
-  {
-    theday: Date.today,
-    amount: 40,
-    nakama: nakamas[0],
-    project_id: projects[0],
-    comment: 'Столы двигал, голым прыгал',
-  },
-  {
-    theday: Date.today,
-    amount: 130,
-    nakama: nakamas[1],
-    project_id: projects[2],
-    comment: 'Вёрстка коробки',
-  },
-])
-
-MoneyRecordCategory.create([
+MoneyRecordCategory.create!([
   { kind: MoneyRecord::KIND_INCOME, name: 'common' },
   { kind: MoneyRecord::KIND_INCOME, name: 'support' },
   { kind: MoneyRecord::KIND_CONSUMPTION, name: 'оплата работы' },
@@ -42,4 +15,31 @@ MoneyRecordCategory.create([
   { kind: MoneyRecord::KIND_CONSUMPTION, name: 'выплаты государству' },
   { kind: MoneyRecord::KIND_CONSUMPTION, name: 'дивиденты' },
   { kind: MoneyRecord::KIND_CONSUMPTION, name: 'другое' }
+])
+
+projects = Project.create!([
+  { name: "Codenohito", descr: 'Internal tasks' },
+  { name: "Svezhov", descr: 'Сайт компании «Свежов»' }
+])
+
+nakamas = Nakama.create!([
+  { name: "dymio" },
+  { name: "riceking" }
+])
+
+TimeRecord.create!([
+  {
+    theday: Date.today,
+    amount: 40,
+    nakama: nakamas[0],
+    project: projects[0],
+    comment: 'Столы двигал, голым прыгал',
+  },
+  {
+    theday: Date.today,
+    amount: 130,
+    nakama: nakamas[1],
+    project: projects[1],
+    comment: 'Вёрстка коробки',
+  },
 ])
