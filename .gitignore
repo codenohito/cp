@@ -39,3 +39,5 @@
 /public/sitemap*
 
 /lib/tasks/dymio.rake
+/public/packs
+/node_modules

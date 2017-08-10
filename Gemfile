@@ -22,6 +22,9 @@ gem 'uglifier', '>= 1.3.0'
 gem 'autoprefixer-rails'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 gem 'therubyracer', platforms: :ruby, group: :production
+# Use webpack
+gem 'webpacker', '~> 2.0'
+gem 'foreman'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
@@ -33,6 +36,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
+
 
 # Flexible authentication solution for Rails with Warden
 gem 'devise', '~> 4.3'
