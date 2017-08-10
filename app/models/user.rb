@@ -5,6 +5,8 @@ class User < ApplicationRecord
 
   belongs_to :nakama, optional: true
 
+  has_many :timers, inverse_of: :user, dependent: :destroy
+
   ## Permissions stores in 'perms' integer field where:
   #   0 bit: admin — have all permissions in every projects
   #   1 bit: ability to read and manage money records out of projects

@@ -1,27 +1,134 @@
 .holder
   h1 Timer
+
+  h2 Active timers:
+  - if @timers.any?
+    ul
+      - @timers.each do |timer|
+        li
+          - seconds_passed = timer.seconds.to_i
+          - seconds_passed += (Time.now - timer.started_at).to_i unless timer.started_at.nil?
+          ' id:
+          = timer.id
+          br
+          ' state:
+          = timer.started_at.nil? ? 'paused' : 'running'
+          br
+          ' time:
+          = "#{seconds_passed / 60}:#{seconds_passed % 60}"
+          br
+          ' project:
+          = timer.project ? timer.project.name : '-'
+          br
+          ' comment:
+          = timer.comment
+  - else
+    p Have no one
+
+  h2 New time record
   = form_for TimeRecord.new, url: { action: 'create' }, \
                              html: { class: 'pure-form pure-form-stacked' } do |f|
     fieldset
       legend New time record:
-      = f.text_field :theday
-      = f.text_field :amount
+      = f.text_field :theday, placeholder: 'date (yyyy-mm-dd)'
+      = f.text_field :amount, placeholder: 'spent time (in minutes)'
       - if current_user.admin?
-        = f.select :nakama_id, options_for_select(Nakama.all.collect { |nkm| [nkm.name, nkm.id] })
-      = f.select :project_id, options_for_select(Project.all.collect { |prj| [prj.name, prj.id] })
-      = f.text_field :comment
+        = f.select :nakama_id, options_for_select(Nakama.all.collect { |nkm| [nkm.name, nkm.id] }), include_blank: "- choose nakama -"
+      = f.select :project_id, options_for_select(Project.all.collect { |prj| [prj.name, prj.id] }), include_blank: "- choose project -"
+      = f.text_field :comment, placeholder: 'Comment'
       = f.submit "Save"
 
-  ul
-    - @records.each do |record|
-      li
-        p
-          = l record.theday, format: :short
-          br
-          = record.amount
-          ' ,
-          = record.nakama.name
-          ' ,
-          = record.project.name
-          br
-          = record.comment
+  h2 Records
+  - if @records.any?
+    ul
+      - @records.each do |record|
+        li
+          p
+            ' day:
+            = l record.theday, format: :short
+            ' , time:
+            = record.amount / 60
+            | :
+            = record.amount % 60
+            br
+            ' nakama:
+            = record.nakama.name
+            ' , project:
+            = record.project.name
+            br
+            ' comment:
+            = record.comment
+  - else
+    p Have no records
+
+// - - - Timer API: - - -
+/
+/ Methods:
+/
+/   GET /timer.json
+/     Index of time records and timers.
+/     params: none
+/     return: {
+/       "records": <array of existed time records>,
+/       "timers": <array of runned and paused timers data>
+/     }
+/
+/   POST /timer.json
+/     Create a new time record
+/     params: look in time_records_controller.rb method time_record_params
+/     return:
+/       if success: {"success":true,"record_id":<ID>}
+/       if fault: {
+/         "success":false,
+/         "errors":{
+/           <field_name>:<array of error messages>,
+/           ...
+/         }
+/       }
+/
+/   GET or POST /timer/new
+/   GET or POST /timer/new/run
+/     Run a new timer.
+/     params: look in time_records_controller.rb method timer_params
+/     return: {"timer":<created timer data>}
+/
+/   GET or POST /timer/:id/pause
+/     Pause timer.
+/     params: none, only correct timer id in url
+/     return: {"timer":<timer data>}
+/
+/   GET or POST /timer/:id/run
+/     Resume paused timer.
+/     params: none, only correct timer id in url
+/     return: {"timer":<timer data>}
+/
+/   GET or POST /timer/:id/finish
+/     Finish timer. Warning: the timer will be destroyed!
+/     You can use this method to discard timer too.
+/     params: none, only correct timer id in url
+/     return: {"timer":<timer data>}
+/
+/ Data examples:
+/
+/   example of time record data:
+/   {
+/     "id":1,
+/     "theday":"2017-08-10",
+/     "amount":40,                 / - time in minutes
+/     "nakama_id":1,
+/     "project_id":1,
+/     "comment":"Столы двигал, голым прыгал",
+/     "created_at":"2017-08-10T17:59:32.866+07:00",
+/     "updated_at":"2017-08-10T17:59:32.866+07:00"
+/   }
+/
+/   example of timer data:
+/   {
+/     "id":22,
+/     "nakama_id":4,
+/     "state":"running",  / - possible values: running, paused, finished
+/     "minutes":3,
+/     "seconds":31,
+/     "project_id":12,
+/     "comment":"Making news"
+/   }
