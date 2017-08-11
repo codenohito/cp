@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170723082218) do
+ActiveRecord::Schema.define(version: 20170810095948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,9 +73,41 @@ ActiveRecord::Schema.define(version: 20170723082218) do
     t.index ["theday"], name: "index_time_records_on_theday"
   end
 
+  create_table "timers", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "started_at"
+    t.integer "seconds"
+    t.bigint "project_id"
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_timers_on_project_id"
+    t.index ["user_id"], name: "index_timers_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "nakama_id"
+    t.integer "perms"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["nakama_id"], name: "index_users_on_nakama_id"
+  end
+
   add_foreign_key "history_records", "projects"
   add_foreign_key "money_records", "nakamas"
   add_foreign_key "money_records", "projects"
   add_foreign_key "time_records", "nakamas"
   add_foreign_key "time_records", "projects"
+  add_foreign_key "timers", "projects"
+  add_foreign_key "timers", "users"
+  add_foreign_key "users", "nakamas"
 end

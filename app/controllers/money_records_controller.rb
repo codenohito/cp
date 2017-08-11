@@ -1,4 +1,5 @@
 class MoneyRecordsController < ApplicationController
+  before_action :authenticate_user!
 
   def index
     @records = MoneyRecord.ordered
@@ -23,5 +24,4 @@ class MoneyRecordsController < ApplicationController
         :category_id, :nakama_id, :project_id,
         :comment)
     end
-
 end

@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nakama: one
+  project: one
+  comment: MyText
+  minutes: 1
+  seconds: 1
+
+two:
+  nakama: two
+  project: two
+  comment: MyText
+  minutes: 1
+  seconds: 1

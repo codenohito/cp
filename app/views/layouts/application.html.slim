@@ -9,15 +9,30 @@ html
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
 
   body
-    header
-      nav.pure-menu.pure-menu-horizontal
-        = link_to 'Dashboard', root_path, class: 'pure-menu-heading pure-menu-link'
-        ul.pure-menu-list
-          li.pure-menu-item = link_to 'Projects', projects_path, class: 'pure-menu-link'
-          li.pure-menu-item = link_to 'Money', money_path, class: 'pure-menu-link'
-          li.pure-menu-item = link_to 'Timer', timer_path, class: 'pure-menu-link'
+    - if current_user
+      header
+        nav.pure-menu.pure-menu-horizontal
+          = link_to 'Dashboard', root_path, class: 'pure-menu-heading pure-menu-link'
+          ul.pure-menu-list
+            li.pure-menu-item = link_to 'Projects', projects_path, class: 'pure-menu-link'
+            - if current_user.moneyman?
+              li.pure-menu-item = link_to 'Money', money_path, class: 'pure-menu-link'
+            li.pure-menu-item = link_to 'Timer', timer_path, class: 'pure-menu-link'
+            - if current_nakama
+              li.pure-menu-item.pure-menu-has-children.pure-menu-allow-hover
+                a.pure-menu-link href="#" id="nakama-menu-link" aria-haspopup="true" = "@#{current_nakama.name}"
+                ul.pure-menu-children role="menu" aria-labelledby="nakama-menu-link" aria-hidden="true"
+                  / li.pure-menu-item role="presentation" = link_to 'Cabinet', _path, class: 'pure-menu-link', role: 'menuitem'
+                  li.pure-menu-item role="presentation" = link_to 'Sign out', destroy_user_session_path, method: :delete, class: 'pure-menu-link', role: 'menuitem'
 
-    - if flash[:alert].present?
-      p = flash[:alert]
+      - if flash[:alert].present?
+        p = flash[:alert]
 
-    = yield
+      = yield
+
+    - else
+      / devise forms here
+      .holder
+        h1
+          | {code}の人 CP
+        = yield
