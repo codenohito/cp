@@ -1,5 +1,6 @@
 .holder
   h1 Timer
+  
   = form_for TimeRecord.new, url: { action: 'create' }, \
                              html: { class: 'pure-form pure-form-stacked' } do |f|
     fieldset

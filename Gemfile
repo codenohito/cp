@@ -25,6 +25,8 @@ gem 'therubyracer', platforms: :ruby, group: :production
 # Use webpack
 gem 'webpacker', '~> 2.0'
 gem 'foreman'
+# Use React
+gem 'webpacker-react', "~> 0.3.1"
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
