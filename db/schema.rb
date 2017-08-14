@@ -15,14 +15,21 @@ ActiveRecord::Schema.define(version: 20170810095948) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "clusters", force: :cascade do |t|
+    t.string "name"
+    t.text "descr"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "history_records", force: :cascade do |t|
-    t.bigint "project_id"
+    t.bigint "cluster_id"
     t.datetime "moment"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_history_records_on_cluster_id"
     t.index ["moment"], name: "index_history_records_on_moment"
-    t.index ["project_id"], name: "index_history_records_on_project_id"
   end
 
   create_table "money_record_categories", force: :cascade do |t|
@@ -54,10 +61,12 @@ ActiveRecord::Schema.define(version: 20170810095948) do
   end
 
   create_table "projects", force: :cascade do |t|
+    t.bigint "cluster_id"
     t.string "name"
     t.text "descr"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_projects_on_cluster_id"
   end
 
   create_table "time_records", force: :cascade do |t|
@@ -102,9 +111,10 @@ ActiveRecord::Schema.define(version: 20170810095948) do
     t.index ["nakama_id"], name: "index_users_on_nakama_id"
   end
 
-  add_foreign_key "history_records", "projects"
+  add_foreign_key "history_records", "clusters"
   add_foreign_key "money_records", "nakamas"
   add_foreign_key "money_records", "projects"
+  add_foreign_key "projects", "clusters"
   add_foreign_key "time_records", "nakamas"
   add_foreign_key "time_records", "projects"
   add_foreign_key "timers", "projects"
