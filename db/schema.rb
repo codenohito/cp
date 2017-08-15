@@ -32,28 +32,6 @@ ActiveRecord::Schema.define(version: 20170810095948) do
     t.index ["moment"], name: "index_history_records_on_moment"
   end
 
-  create_table "money_record_categories", force: :cascade do |t|
-    t.string "name"
-    t.boolean "kind"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "money_records", force: :cascade do |t|
-    t.datetime "moment"
-    t.float "amount"
-    t.boolean "kind"
-    t.bigint "category_id"
-    t.bigint "nakama_id"
-    t.bigint "project_id"
-    t.text "comment"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["moment"], name: "index_money_records_on_moment"
-    t.index ["nakama_id"], name: "index_money_records_on_nakama_id"
-    t.index ["project_id"], name: "index_money_records_on_project_id"
-  end
-
   create_table "nakamas", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -112,8 +90,6 @@ ActiveRecord::Schema.define(version: 20170810095948) do
   end
 
   add_foreign_key "history_records", "clusters"
-  add_foreign_key "money_records", "nakamas"
-  add_foreign_key "money_records", "projects"
   add_foreign_key "projects", "clusters"
   add_foreign_key "time_records", "nakamas"
   add_foreign_key "time_records", "projects"

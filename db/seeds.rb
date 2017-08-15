@@ -6,16 +6,16 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-MoneyRecordCategory.create!([
-  { kind: MoneyRecord::KIND_INCOME, name: 'common' },
-  { kind: MoneyRecord::KIND_INCOME, name: 'support' },
-  { kind: MoneyRecord::KIND_CONSUMPTION, name: 'оплата работы' },
-  { kind: MoneyRecord::KIND_CONSUMPTION, name: 'покупка мат. активов' },
-  { kind: MoneyRecord::KIND_CONSUMPTION, name: 'оплата услуг' },
-  { kind: MoneyRecord::KIND_CONSUMPTION, name: 'выплаты государству' },
-  { kind: MoneyRecord::KIND_CONSUMPTION, name: 'дивиденты' },
-  { kind: MoneyRecord::KIND_CONSUMPTION, name: 'другое' }
-])
+# MoneyRecordCategory.create!([
+#   { kind: MoneyRecord::KIND_INCOME, name: 'common' },
+#   { kind: MoneyRecord::KIND_INCOME, name: 'support' },
+#   { kind: MoneyRecord::KIND_CONSUMPTION, name: 'оплата работы' },
+#   { kind: MoneyRecord::KIND_CONSUMPTION, name: 'покупка мат. активов' },
+#   { kind: MoneyRecord::KIND_CONSUMPTION, name: 'оплата услуг' },
+#   { kind: MoneyRecord::KIND_CONSUMPTION, name: 'выплаты государству' },
+#   { kind: MoneyRecord::KIND_CONSUMPTION, name: 'дивиденты' },
+#   { kind: MoneyRecord::KIND_CONSUMPTION, name: 'другое' }
+# ])
 
 nakamas = Nakama.create!([
   { name: "dymio" },

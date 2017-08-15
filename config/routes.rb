@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
   get 'money', to: 'money_records#index', as: :money
-  post 'money', to: 'money_records#create'
 
   match 'timer/new',        to: 'time_records#timer_run',    via: [:get, :post]
   match 'timer/:id/run',    to: 'time_records#timer_run',    via: [:get, :post]
