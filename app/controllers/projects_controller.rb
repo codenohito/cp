@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.find params[:id]
-    @history_records = @project.history_records.ordered
+    @history_records = @project.cluster.history_records.ordered
   end
 
   def new
@@ -34,6 +34,6 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:name, :descr)
+    params.require(:project).permit(:cluster_id, :name, :descr)
   end
 end

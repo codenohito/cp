@@ -2,6 +2,8 @@
   h1 New project
   = form_for @project, html: { class: 'pure-form pure-form-stacked' } do |f|
     fieldset
+      = f.label :cluster_id, "Cluster"
+      = f.select :cluster_id, options_for_select(Cluster.all.collect { |clst| [clst.name, clst.id] }), include_blank: "- choose cluster -"
       = f.label :name
       = f.text_field :name
       = f.label :descr
