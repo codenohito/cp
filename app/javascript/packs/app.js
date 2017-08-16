@@ -1,6 +1,17 @@
-import React from 'react';
+import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import Timer from 'components/timer';
+import TimerWrap from 'components/timer_wrap'
+
+
+class main extends Component {
+  render() {
+    return (
+      <div>
+        <TimerWrap />
+      </div>
+    )
+  }
+}
 
 // Map Redux state to component props
 function mapStateToProps(state) {
@@ -16,6 +27,6 @@ function mapDispatchToProps(dispatch) {
 const App = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Timer)
+)(main)
 
-export default App;
+export default App
