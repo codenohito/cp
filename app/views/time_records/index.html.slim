@@ -1,32 +1,31 @@
 .holder
-
-  #root
-  
   h1 Timer
+  
+  #root
 
-  h2 Active timers:
-  - if @timers.any?
-    ul
-      - @timers.each do |timer|
-        li
-          - seconds_passed = timer.seconds.to_i
-          - seconds_passed += (Time.now - timer.started_at).to_i unless timer.started_at.nil?
-          ' id:
-          = timer.id
-          br
-          ' state:
-          = timer.started_at.nil? ? 'paused' : 'running'
-          br
-          ' time:
-          = "#{seconds_passed / 60}:#{seconds_passed % 60}"
-          br
-          ' project:
-          = timer.project ? timer.project.name : '-'
-          br
-          ' comment:
-          = timer.comment
-  - else
-    p Have no one
+  / h2 Active timers:
+  / - if @timers.any?
+  /   ul
+  /     - @timers.each do |timer|
+  /       li
+  /         - seconds_passed = timer.seconds.to_i
+  /         - seconds_passed += (Time.now - timer.started_at).to_i unless timer.started_at.nil?
+  /         ' id:
+  /         = timer.id
+  /         br
+  /         ' state:
+  /         = timer.started_at.nil? ? 'paused' : 'running'
+  /         br
+  /         ' time:
+  /         = "#{seconds_passed / 60}:#{seconds_passed % 60}"
+  /         br
+  /         ' project:
+  /         = timer.project ? timer.project.name : '-'
+  /         br
+  /         ' comment:
+  /         = timer.comment
+  / - else
+  /   p Have no one
 
   h2 New time record
   = form_for TimeRecord.new, url: { action: 'create' }, \

@@ -7,7 +7,7 @@ import SecondsTohhmmss from 'utils/SecondsTohhmmss'
 export default class AddTimer extends Component {
   constructor(props) {
     super(props)
-    this.state = { comment: "", project_id: 0 };
+    this.state = { comment: "", project_id: "" };
 
     this.handleChangeComment = this.handleChangeComment.bind(this);
     this.handleChangeProject = this.handleChangeProject.bind(this);
@@ -22,6 +22,16 @@ export default class AddTimer extends Component {
   }
 
   render () {
+    const optionProjects = [];
+    const optionLength = this.props.projects.length;
+    for (let i = 0; i < optionLength; i += 1) {
+      optionProjects.unshift(<option
+                              key={i}
+                              value={this.props.projects[i].id}>
+                              {this.props.projects[i].title}
+                             </option>);
+    };
+
     return (
       <div>
         <form className="pure-form pure-form-stacked">
@@ -33,15 +43,18 @@ export default class AddTimer extends Component {
             onChange={this.handleChangeComment}
             ref={this.props.inputComment}
           />
-          <input
-            type="number"
-            className="pure-input-1-4"
-            placeholder="- choose project -"
+          <select
             value={this.state.project_id}
             onChange={this.handleChangeProject}
-          />
+            ref={this.props.inputProject}
+          >
+
+            <option value="">- choose project -</option>
+            {optionProjects}
+
+          </select>
         </form>
-        <p><a href="#" onClick={this.props.addTimer}>Add Timer</a></p>
+        <p><a href="#" className="pure-button" onClick={this.props.addTimer}>Add Timer</a></p>
         <h2>Active timers:</h2>
         <div>
           {this.props.activeTimer}

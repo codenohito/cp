@@ -7,35 +7,47 @@ import AddTimer from './add_timer'
 export default class TimerWrap extends Component {
   constructor(props) {
     super(props)
-    this.state = { numTimer: 0, data: {} };
+    this.state = { numTimer: 0, data: {}, projects: [] };
   }
 
   componentDidMount() {
     axios.get('/timer.json').then(response => {
       let data = response.data;
-      this.setState({ data: data})
+      this.setState({ data: data })
       this.setState({ numTimer: data.timers.length })
-      console.log(data)
     });
+    axios.get('/projects.json').then(response => {
+      this.setState({ projects: response.data.projects })
+    })
   }
 
   onAddActiveTimer() {
-    console.log(this.comment.value)
+    let comment = this.comment.value != null ? this.comment.value : "",
+        project = this.project.value != null ?  this.project.value : "",
+        token = document.head.querySelector("[name=csrf-token]").content,
+        self = this;
 
-    // axios.get('/timer/new').then(response => {
-    //   axios.get('/timer.json').then(response => {
-    //     let data = response.data;
-    //     this.setState({ data: data})
-    //     this.setState({ numTimer: data.timers.length })
-    //     console.log(data)
-    //   });
-    // });
-    // axios.post('/timer/new', {
-    //   project_id: 'Fred',
-    //   comment: 'Flintstone'
-    // }).then(function (response) {
-    //   console.log(response);
-    // })
+    axios.post('/timer/new', {
+      timer: {
+        project_id: project,
+        comment: comment
+      },
+      authenticity_token: token
+    }).then(function (response) {
+      axios.get('/timer.json').then(response => {
+        let data = response.data;
+        self.setState({ data: data })
+        self.setState({ numTimer: data.timers.length })
+      });
+    })
+  }
+
+  onRemoveTimer() {
+    axios.get('/timer.json').then(response => {
+      let data = response.data;
+      this.setState({ data: data })
+      this.setState({ numTimer: data.timers.length })
+    });
   }
 
   render() {
@@ -49,23 +61,23 @@ export default class TimerWrap extends Component {
                           state={timers[i].state}
                           minutes={timers[i].minutes}
                           seconds={timers[i].seconds}
-                    />);
+                          commentTimer={timers[i].comment}
+                          projectId={timers[i].project_id}
+                          projectTitles={this.state.projects}
+                          removeTimer={this.onRemoveTimer.bind(this)}
+                         />);
     };
 
     return (
       <section>
-        <h1>Timer</h1>
-        <p>Lenght timer: {this.state.numTimer}</p>
         <h2>Add a timer:</h2>
         <AddTimer
           addTimer={this.onAddActiveTimer.bind(this)}
           activeTimer={activeTimer}
           inputComment={(input) => this.comment = input}
+          projects={this.state.projects}
+          inputProject={(input) => this.project = input}
         />
-        <h2>New time record:</h2>
-        <p>:)</p>
-        <h2>Records:</h2>
-        <p>(:</p>
       </section>
 
     )

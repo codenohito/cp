@@ -7,16 +7,15 @@ import SecondsTohhmmss from 'utils/SecondsTohhmmss'
 export default class Timer extends Component {
   constructor(props) {
     super(props)
-    this.state = { clock: 0, time: '', offset: null, interval: null};
+    this.state = { clock: 0, time: '', offset: null, interval: null, finish: false};
     this.reset = this.reset.bind(this);
     this.play = this.play.bind(this);
     this.pause = this.pause.bind(this);
+    this.finish = this.finish.bind(this);
+
   }
 
   componentDidMount() {
-    // axios.get('/timer.json').then(response => {
-    //   console.log(response.data)
-    // });
 
     if (this.props.state == "running") {
       this.setState({clock: this.props.minutes * 60000 + this.props.seconds * 10})
@@ -44,12 +43,34 @@ export default class Timer extends Component {
     this.setState({time: time })
   }
 
+  finish() {
+    clearInterval(this.state.interval)
+    this.setState({interval: null })
+
+    let requestLink = `/timer/${this.props.id}/finish`
+    axios.get(requestLink)
+
+    let elTimeRecord = document.getElementById('time_record_amount'),
+        elProjectRecord = document.getElementById('time_record_project_id'),
+        elCommentRecord = document.getElementById('time_record_comment');
+
+    elTimeRecord.value = Math.round(this.state.clock / 60000)
+    elProjectRecord.value = this.props.projectId
+    elCommentRecord.value = this.props.commentTimer
+
+    this.props.removeTimer()
+
+    this.setState({finish: true})
+  }
+
   update() {
     let clock = this.state.clock
     clock += this.calculateOffset()
     this.setState({clock: clock })
     let time = SecondsTohhmmss(clock / 1000)
     this.setState({time: time })
+
+    document.title = this.state.time;
   }
 
   calculateOffset() {
@@ -66,7 +87,6 @@ export default class Timer extends Component {
 
       let requestLink = `/timer/${this.props.id}/pause`
 
-      console.log(requestLink)
       axios.get(requestLink)
     }
   }
@@ -78,9 +98,8 @@ export default class Timer extends Component {
 
       let requestLink = `/timer/${this.props.id}/run`
 
-      console.log(requestLink)
-
       axios.get(requestLink)
+
     }
   }
 
@@ -92,7 +111,6 @@ export default class Timer extends Component {
     };
 
     const buttonStyle = {
-      background: "#fff",
       color: "#666",
       border: "1px solid #ddd",
       margin: "0.25em",
@@ -110,17 +128,34 @@ export default class Timer extends Component {
     };
 
     const groupButtons = {
-      float: "right"
+      float: "right",
+      marginTop: "5px"
+    }
+
+    let projectTitle = "";
+
+    for (let i = 0; i < this.props.projectTitles.length; i++) {
+      if (this.props.projectTitles[i].id == this.props.projectId) {
+        projectTitle = this.props.projectTitles[i].title;
+      }
     }
 
     return (
-      <div style={timerStyle} className="react-timer">
-        <h3 style={secondsStyles} className="seconds"> {this.state.time} {this.props.prefix}</h3>
-        <div style={groupButtons}>
-          <button onClick={this.reset} style={buttonStyle} >reset</button>
-          <button onClick={this.play} style={buttonStyle} >play</button>
-          <button onClick={this.pause} style={buttonStyle} >pause</button>
-        </div>
+      <div>
+        { !this.state.finish ?
+        <div style={timerStyle} className="react-timer">
+          <div>
+            <h3>{projectTitle}</h3>
+            <p>{this.props.commentTimer}</p>
+          </div>
+          <br />
+          <h3 style={secondsStyles} className="seconds"> {this.state.time}</h3>
+          <div style={groupButtons}>
+            <button onClick={this.play} className="pure-button">play</button>
+            <button onClick={this.pause} className="pure-button">pause</button>
+            <button onClick={this.finish} className="pure-button button-error" >finish</button>
+          </div>
+        </div> : "" }
       </div>
     )
   }
