@@ -60,3 +60,19 @@ Run a deploy with command `mina deploy`.
 Before the first deploy to server you'll need to run `mina setup`
 for production. Also you'll need to create files 'application.yml', 'cable.yml'
 and 'secrets.yml' in 'shared/config' directory on the server.
+
+API documentation
+-----------------
+
+__GET__ `/projects.json` &mdash; Get list of projects.
+<br>Params: none
+<br>Return:
+
+    {
+      "projects":[
+        {"id":4,"title":"Svezhov Dev"},
+        {"id":3,"title":"Svezhov TR"},
+        {"id":2,"title":"Codenohito CP"},
+        {"id":1,"title":"Codenohito Growth"}
+      ]
+    }
