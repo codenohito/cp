@@ -19,15 +19,23 @@ export default class TimerWrap extends Component {
     });
   }
 
-  onAddActiveTimer () {
-    axios.get('/timer/new').then(response => {
-      axios.get('/timer.json').then(response => {
-        let data = response.data;
-        this.setState({ data: data})
-        this.setState({ numTimer: data.timers.length })
-        console.log(data)
-      });
-    });
+  onAddActiveTimer() {
+    console.log(this.comment.value)
+
+    // axios.get('/timer/new').then(response => {
+    //   axios.get('/timer.json').then(response => {
+    //     let data = response.data;
+    //     this.setState({ data: data})
+    //     this.setState({ numTimer: data.timers.length })
+    //     console.log(data)
+    //   });
+    // });
+    // axios.post('/timer/new', {
+    //   project_id: 'Fred',
+    //   comment: 'Flintstone'
+    // }).then(function (response) {
+    //   console.log(response);
+    // })
   }
 
   render() {
@@ -52,6 +60,7 @@ export default class TimerWrap extends Component {
         <AddTimer
           addTimer={this.onAddActiveTimer.bind(this)}
           activeTimer={activeTimer}
+          inputComment={(input) => this.comment = input}
         />
         <h2>New time record:</h2>
         <p>:)</p>
