@@ -3,11 +3,25 @@ class ProjectsController < ApplicationController
 
   def index
     @projects = Project.ordered
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json do
+        projs_for_json = @projects.select(:id, :name, :cluster_id).
+                                   includes(:cluster).
+                                   map do |prj|
+                                     { id: prj.id, title: prj.title }
+                                   end
+        render json: {
+          projects: projs_for_json
+        }
+      end
+    end
   end
 
   def show
     @project = Project.find params[:id]
-    @history_records = @project.history_records.ordered
+    @history_records = @project.cluster.history_records.ordered
   end
 
   def new
@@ -34,6 +48,6 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:name, :descr)
+    params.require(:project).permit(:cluster_id, :name, :descr)
   end
 end

@@ -1,7 +1,7 @@
 class HistoryRecord < ApplicationRecord
-  belongs_to :project, inverse_of: :history_records
+  belongs_to :cluster, inverse_of: :history_records
 
-  validates :project, :moment, presence: true
+  validates :moment, presence: true
 
   scope :ordered, -> { order(moment: :desc) }
 

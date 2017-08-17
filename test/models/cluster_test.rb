@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class MoneyRecordTest < ActiveSupport::TestCase
+class ClusterTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

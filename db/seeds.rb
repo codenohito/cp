@@ -6,25 +6,32 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-MoneyRecordCategory.create!([
-  { kind: MoneyRecord::KIND_INCOME, name: 'common' },
-  { kind: MoneyRecord::KIND_INCOME, name: 'support' },
-  { kind: MoneyRecord::KIND_CONSUMPTION, name: 'оплата работы' },
-  { kind: MoneyRecord::KIND_CONSUMPTION, name: 'покупка мат. активов' },
-  { kind: MoneyRecord::KIND_CONSUMPTION, name: 'оплата услуг' },
-  { kind: MoneyRecord::KIND_CONSUMPTION, name: 'выплаты государству' },
-  { kind: MoneyRecord::KIND_CONSUMPTION, name: 'дивиденты' },
-  { kind: MoneyRecord::KIND_CONSUMPTION, name: 'другое' }
-])
-
-projects = Project.create!([
-  { name: "Codenohito", descr: 'Internal tasks' },
-  { name: "Svezhov", descr: 'Сайт компании «Свежов»' }
-])
+# MoneyRecordCategory.create!([
+#   { kind: MoneyRecord::KIND_INCOME, name: 'common' },
+#   { kind: MoneyRecord::KIND_INCOME, name: 'support' },
+#   { kind: MoneyRecord::KIND_CONSUMPTION, name: 'оплата работы' },
+#   { kind: MoneyRecord::KIND_CONSUMPTION, name: 'покупка мат. активов' },
+#   { kind: MoneyRecord::KIND_CONSUMPTION, name: 'оплата услуг' },
+#   { kind: MoneyRecord::KIND_CONSUMPTION, name: 'выплаты государству' },
+#   { kind: MoneyRecord::KIND_CONSUMPTION, name: 'дивиденты' },
+#   { kind: MoneyRecord::KIND_CONSUMPTION, name: 'другое' }
+# ])
 
 nakamas = Nakama.create!([
   { name: "dymio" },
   { name: "riceking" }
+])
+
+clusters = Cluster.create!([
+  { name: "Codenohito", descr: 'Internal tasks of our team' },
+  { name: "Svezhov", descr: 'Website of «Свежов» company' }
+])
+
+projects = Project.create!([
+  { cluster: clusters[0], name: "Growth", descr: 'Team growth work: learning, amrketing etc.' },
+  { cluster: clusters[0], name: "CP", descr: 'Control panel' },
+  { cluster: clusters[1], name: "TR", descr: 'Technical requirements' },
+  { cluster: clusters[1], name: "Dev", descr: 'Website development' }
 ])
 
 User.create!([
