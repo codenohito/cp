@@ -15,6 +15,9 @@ Getting started
 Make sure you have Ruby version installed, specified in the `.ruby-version`
 file in the root directory of the application.
 
+Node v6.11.2.
+Yarn 0.20.1+
+
 If you use [RVM](https://rvm.io/) add a '.ruby-gemset'
 [file](https://rvm.io/workflow/projects#project-file-ruby-version)
 to the root directory of the application.
