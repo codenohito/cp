@@ -35,26 +35,27 @@ export default class AddTimer extends Component {
     return (
       <div>
         <form className="pure-form pure-form-stacked">
-          <input
-            type="text"
-            className="pure-input-1-4"
-            placeholder="Comment"
-            value={this.state.comment}
-            onChange={this.handleChangeComment}
-            ref={this.props.inputComment}
-          />
           <select
             value={this.state.project_id}
             onChange={this.handleChangeProject}
-            ref={this.props.inputProject}
-          >
+            ref={this.props.inputProject}>
 
             <option value="">- choose project -</option>
             {optionProjects}
 
           </select>
+          <input
+            type="text"
+            className="pure-input-1-2"
+            placeholder="Comment"
+            value={this.state.comment}
+            onChange={this.handleChangeComment}
+            ref={this.props.inputComment}
+          />
+
         </form>
         <p><a href="#" className="pure-button" onClick={this.props.addTimer}>Add Timer</a></p>
+        <br />
         <h2>Active timers:</h2>
         <div>
           {this.props.activeTimer}

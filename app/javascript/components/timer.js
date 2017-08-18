@@ -7,7 +7,7 @@ import SecondsTohhmmss from 'utils/SecondsTohhmmss'
 export default class Timer extends Component {
   constructor(props) {
     super(props)
-    this.state = { clock: 0, time: '', offset: null, interval: null, finish: false};
+    this.state = { clock: 0, time: '', offset: null, isPlay: false, interval: null, finish: false};
     this.reset = this.reset.bind(this);
     this.play = this.play.bind(this);
     this.pause = this.pause.bind(this);
@@ -88,6 +88,8 @@ export default class Timer extends Component {
       let requestLink = `/timer/${this.props.id}/pause`
 
       axios.get(requestLink)
+
+      this.setState({isPlay: false});
     }
   }
 
@@ -95,42 +97,14 @@ export default class Timer extends Component {
     if (!this.state.interval) {
       this.setState({offset: Date.now() })
       this.setState({interval: setInterval(this.update.bind(this), 1000) })
-
+      this.setState({isPlay: true});
       let requestLink = `/timer/${this.props.id}/run`
 
       axios.get(requestLink)
-
     }
   }
 
   render() {
-    const timerStyle = {
-      margin: "10px 0",
-      padding: "2em",
-      border: "1px solid #eee"
-    };
-
-    const buttonStyle = {
-      color: "#666",
-      border: "1px solid #ddd",
-      margin: "0.25em",
-      padding: "0.75em",
-      fontWeight: "200"
-    };
-
-    const secondsStyles = {
-      fontSize: "200%",
-      fontWeight: "200",
-      lineHeight: "1.5",
-      margin: "0px",
-      color: "#666",
-      display: "inline-block"
-    };
-
-    const groupButtons = {
-      float: "right",
-      marginTop: "5px"
-    }
 
     let projectTitle = "";
 
@@ -143,17 +117,19 @@ export default class Timer extends Component {
     return (
       <div>
         { !this.state.finish ?
-        <div style={timerStyle} className="react-timer">
-          <div>
-            <h3>{projectTitle}</h3>
-            <p>{this.props.commentTimer}</p>
+        <div className={ !this.state.isPlay ? "react-timer" : "react-timer react-timer-active" }>
+          <div className="pure-u-1-3">
+            <h3 className="react-timer-project">{projectTitle}</h3>
+            <p className="react-timer-comment">{this.props.commentTimer}</p>
           </div>
-          <br />
-          <h3 style={secondsStyles} className="seconds"> {this.state.time}</h3>
-          <div style={groupButtons}>
-            <button onClick={this.play} className="pure-button">play</button>
-            <button onClick={this.pause} className="pure-button">pause</button>
-            <button onClick={this.finish} className="pure-button button-error" >finish</button>
+          <div className="pure-u-2-3 timer-block">
+            <h3 className="seconds"> {this.state.time}</h3>
+            <br />
+            <div className="timer-button-group">
+              <button onClick={this.pause} className="pure-button">pause</button>
+              <button onClick={this.play} className="pure-button is-button-active">play</button>
+              <button onClick={this.finish} className="pure-button timer-button-finish" >finish</button>
+            </div>
           </div>
         </div> : "" }
       </div>
