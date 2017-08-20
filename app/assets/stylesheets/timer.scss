@@ -1,0 +1,99 @@
+.time-record-holder {
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+  max-width: 1340px;
+}
+
+.timer-wrap {
+  box-sizing: border-box;
+  padding-right: 30px;
+}
+
+.seconds {
+  font-size: 200%;
+  font-weight: 200;
+  margin: 0px;
+  color: #666;
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+.react-timer {
+  position: relative;
+  margin: 10px 0;
+  padding: 2em;
+  border: 1px solid #eee;
+}
+
+.react-timer-active {
+  border-color: #4BC16B;
+}
+
+.react-timer-project {
+  margin-top: 0;
+}
+
+.react-timer-comment {
+  color: #666;
+}
+
+.react-timer-active .is-button-active {
+  background-color: #4BC16B;
+  color: #fff;
+}
+
+.timer-block {
+  box-sizing: border-box;
+  padding-left: 30px;
+}
+
+.timer-button-group {
+  position: relative;
+  left: -5px;
+}
+
+.timer-button-finish {
+  position: absolute;
+  right: 0;
+  top: -125%;
+  width: 70px;
+  border-radius: 50px;
+  height: 70px;
+  padding: 0;
+  transition: all .1s linear;
+  &:hover {
+    background-color: #FF7563;
+    color: #fff;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1020px) {
+  .react-timer > .pure-u-1-3 {
+    width: 100%;
+  }
+  .react-timer > .timer-block {
+    width: 100%;
+    padding-left: 0;
+  }
+}
+
+@media (min-width: 1px) and (max-width: 520px) {
+  .react-timer > .pure-u-1-3 {
+    width: 100%;
+  }
+  .react-timer > .timer-block {
+    width: 100%;
+    padding-left: 0;
+  }
+  .react-timer {
+    padding: 1em;
+  }
+}
+
+@media (min-width: 1px) and (max-width: 768px) {
+  .timer-wrap {
+    margin-right: 0;
+  }
+}

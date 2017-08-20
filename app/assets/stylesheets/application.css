@@ -12,6 +12,8 @@
  *
  * do not require_tree .
  *= require pure
+ *= require grids-responsive-min
  *= require dirty_styles
+ *= require timer
  *= require_self
  */
