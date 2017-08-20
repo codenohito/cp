@@ -32,12 +32,11 @@
 .sass-cache
 
 /public/assets
+/public/packs
 /public/cache/*
 /public/content/*
-/public/uploads/*
 /public/system/*
 /public/sitemap*
+/public/uploads/*
 
 /lib/tasks/dymio.rake
-/public/packs
-/node_modules
