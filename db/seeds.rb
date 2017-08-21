@@ -18,8 +18,9 @@
 # ])
 
 nakamas = Nakama.create!([
-  { name: "dymio" },
-  { name: "riceking" }
+  { name: "rick" },
+  { name: "morty" },
+  { name: "summer" }
 ])
 
 clusters = Cluster.create!([
