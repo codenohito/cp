@@ -39,7 +39,7 @@ set :shared_files, fetch(:shared_files, []).push('config/application.yml',
                                                  'config/database.yml',
                                                  'config/secrets.yml')
 
-set :asset_dirs, fetch(:shared_dirs, []).push('app/javascript')
+set :asset_dirs, fetch(:asset_dirs, []).push('app/javascript/')
 
 # This task is the environment that is loaded for all remote run commands, such as
 # `mina deploy` or `mina rake`.
