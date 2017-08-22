@@ -18,8 +18,8 @@ export default class Timer extends Component {
   componentDidMount() {
 
     if (this.props.state == "running") {
-      this.setState({clock: this.props.minutes * 60000 + this.props.seconds * 1000})
-      this.play()
+      this.setState({clock: this.props.minutes * 60000 + this.props.seconds * 1000});
+      this.play();
     } else if (this.props.state == "paused") {
       this.setState({clock: this.props.minutes * 60000 + this.props.seconds * 1000})
       let time = SecondsTohhmmss((this.props.minutes * 60000 + this.props.seconds * 1000) / 1000)
