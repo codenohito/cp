@@ -3,6 +3,9 @@ class TimeRecordsController < ApplicationController
 
   def index
     @records = TimeRecord.ordered
+    unless current_user.admin?
+      @records = @records.where(nakama: current_nakama)
+    end
     @timers = current_user.timers
 
     respond_to do |format|

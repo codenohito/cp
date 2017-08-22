@@ -18,30 +18,31 @@
           = f.text_field :comment, placeholder: 'Comment', class: "pure-input-1-2"
           = f.submit "Save", class: "pure-button"
 
-      h2 Records:
       - if @records.any?
-        ul
+        h2 Records:
+        .time-records
+          - cur_day = nil
           - @records.each do |record|
-            li
-              p
-                ' day:
-                = l record.theday, format: :short
-                ' , time:
+            - unless record.theday == cur_day
+              .time-records-day = l record.theday, format: "%d %B %Y"
+              - cur_day = record.theday
+            .time-record
+              span.tr-info-time
                 = record.amount / 60
                 | :
-                = record.amount % 60
-                br
-                ' nakama:
-                = record.nakama.name
-                ' , project:
-                = record.project.name
-                br
-                ' comment:
-                = record.comment
+                = "%02d" % (record.amount % 60)
+              - if current_user.admin?
+                span.tr-info-nakama
+                  | @
+                  = record.nakama.name
+                  '
+              ' at
+              span.tr-info-project = link_to record.project.title, project_path(record.project)
+              .tr-info-comment = record.comment
       - else
         p Have no records
-    
-= javascript_pack_tag 'index'    
+
+= javascript_pack_tag 'index'
 
 // - - - Timer API: - - -
 /

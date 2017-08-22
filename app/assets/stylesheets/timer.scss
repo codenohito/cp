@@ -97,3 +97,23 @@
     margin-right: 0;
   }
 }
+
+/* --- Time record --- */
+.time-records {
+  .time-records-day {
+    font-size: 10px;
+    font-weight: bold;
+  }
+}
+.time-record {
+  margin: 12px 0;
+  .tr-info-time {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+    border-right: 2px solid #969696;
+    width: 46px;
+  }
+  .tr-info-nakama { color: #ff9231; }
+  .tr-info-comment { padding-left: 54px; }
+}
