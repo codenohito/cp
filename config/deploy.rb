@@ -9,12 +9,6 @@ require 'mina/git'
 #   repository   - Git repo to clone from. (needed by mina/git)
 #   branch       - Branch name to deploy. (needed by mina/git)
 
-set :application_name, 'foobar'
-set :domain, 'foobar.com'
-set :deploy_to, '/var/www/foobar.com'
-set :repository, 'git://...'
-set :branch, 'master'
-
 set :application_name, 'codenohito_cp'
 set :domain, 'codenohito.server' # cp.codenohito.ru
 set :deploy_to, '/home/dymio/www/codenohito_cp'
