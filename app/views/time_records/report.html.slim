@@ -1,0 +1,20 @@
+.holder
+  h1 Time report
+  p
+    ' From day:
+    = l @from_day, format: "%e %B %Y"
+    ' ,
+    ' to day:
+    = l @to_day, format: "%e %B %Y"
+  table
+    thead
+      tr
+        th Projects
+        - @nakamas.each do |nakama|
+          th.das-nakama = "@#{nakama.name}"
+    tbody
+      - @projects.each do |project|
+        tr
+          td = project.title
+          - @nakamas.each do |nakama|
+            td = formatted_worktime nakama.time_records.where(project: project).where('time_records.theday >= ? AND time_records.theday <= ?', @from_day, @to_day).sum(:amount)

@@ -74,6 +74,19 @@ class TimeRecordsController < ApplicationController
     render json: { timer: return_data }
   end
 
+  def report
+    if current_user.admin?
+      @nakamas = Nakama.order(id: :asc)
+      @projects = Project.ordered
+      today = Date.today
+      @from_day = today.beginning_of_month
+      @to_day = today.end_of_month
+    else
+      flash[:alert] = 'No access'
+      redirect_to root_url
+    end
+  end
+
   private
 
   def time_record_params

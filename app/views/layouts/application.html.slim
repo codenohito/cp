@@ -17,7 +17,13 @@ html
             li.pure-menu-item = link_to 'Projects', projects_path, class: 'pure-menu-link'
             - if current_user.moneyman?
               li.pure-menu-item = link_to 'Money', money_path, class: 'pure-menu-link'
-            li.pure-menu-item = link_to 'Timer', timer_path, class: 'pure-menu-link'
+            - if current_user.admin?
+              li.pure-menu-item.pure-menu-has-children.pure-menu-allow-hover
+                = link_to 'Timer', timer_path, class: 'pure-menu-link', id: 'timer-menu-link', 'aria-haspopup': 'true'
+                ul.pure-menu-children role="menu" aria-labelledby="timer-menu-link" aria-hidden="true"
+                  li.pure-menu-item role="presentation" = link_to 'Report', timer_report_path, class: 'pure-menu-link', role: 'menuitem'
+            - else
+              li.pure-menu-item = link_to 'Timer', timer_path, class: 'pure-menu-link'
             - if current_nakama
               li.pure-menu-item.pure-menu-has-children.pure-menu-allow-hover
                 a.pure-menu-link href="#" id="nakama-menu-link" aria-haspopup="true" = "@#{current_nakama.name}"
