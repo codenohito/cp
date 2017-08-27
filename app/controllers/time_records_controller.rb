@@ -75,16 +75,21 @@ class TimeRecordsController < ApplicationController
   end
 
   def report
-    if current_user.admin?
-      @nakamas = Nakama.order(id: :asc)
-      @projects = Project.ordered
-      today = Date.today
-      @from_day = today.beginning_of_month
-      @to_day = today.end_of_month
-    else
-      flash[:alert] = 'No access'
-      redirect_to root_url
+    @nakamas = current_user.admin? ? Nakama.order(id: :asc).to_a : [current_nakama]
+    @projects = Project.ordered
+    today = Date.today
+    @from_day = today.beginning_of_month
+    @to_day = today.end_of_month
+  end
+
+  def weekly_report
+    the_day_in_the_week = Date.today
+    @nakamas = current_user.admin? ? Nakama.order(id: :asc).to_a : [current_nakama]
+    @projects = Project.ordered
+    if params[:weeks_before].present?
+      the_day_in_the_week = the_day_in_the_week - params[:weeks_before].to_i.weeks
     end
+    @week_start = the_day_in_the_week.beginning_of_week
   end
 
   private

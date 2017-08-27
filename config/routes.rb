@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
   get 'money', to: 'money_records#index', as: :money
 
+  get 'timer/weekly', to: 'time_records#weekly_report', as: :timer_weekly
   get 'timer/report', to: 'time_records#report', as: :timer_report
   match 'timer/new',        to: 'time_records#timer_run',    via: [:get, :post]
   match 'timer/:id/run',    to: 'time_records#timer_run',    via: [:get, :post]
