@@ -19,6 +19,8 @@ export default class TimerWrap extends Component {
     axios.get('/projects.json').then(response => {
       this.setState({ projects: response.data.projects })
     })
+
+    console.log(this.props.timers)
   }
 
   onAddActiveTimer() {

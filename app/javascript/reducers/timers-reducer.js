@@ -7,7 +7,8 @@ const initialState = {
   minutes: 0,
   seconds: 0,
   project_id: 0,
-  comment: ''
+  comment: '',
+  timers: {}
 }
 
 const timersReducer = function(state = initialState, action) {

@@ -12,7 +12,6 @@ export default class Timer extends Component {
     this.play = this.play.bind(this);
     this.pause = this.pause.bind(this);
     this.finish = this.finish.bind(this);
-
   }
 
   componentDidMount() {

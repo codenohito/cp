@@ -1,13 +1,22 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+import axios from 'axios';
 import TimerWrap from 'components/timer_wrap'
 
-
 class main extends Component {
+  componentDidMount() {
+    axios.get('/timer.json').then(response => {
+      store.dispatch({
+        type: 'TIMERS_LIST',
+        timers: response.data.timers
+      });
+    });
+  }
+
   render() {
     return (
       <div>
-        <TimerWrap />
+        <TimerWrap timers={ this.props.timers }/>
       </div>
     )
   }
@@ -15,7 +24,9 @@ class main extends Component {
 
 // Map Redux state to component props
 function mapStateToProps(state) {
-  return {}
+  return {
+    timers: store.timersState.timers
+  }
 }
 
 // Map Redux actions to component props
