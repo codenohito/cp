@@ -7,20 +7,22 @@ import AddTimer from './add_timer'
 export default class TimerWrap extends Component {
   constructor(props) {
     super(props)
-    this.state = { numTimer: 0, data: {}, projects: [] };
+    this.state = { numTimer: 0, data: [], projects: [] };
+    this.dance = this.dance.bind(this);
   }
 
   componentDidMount() {
-    axios.get('/timer.json').then(response => {
-      let data = response.data;
-      this.setState({ data: data })
-      this.setState({ numTimer: data.timers.length })
-    });
     axios.get('/projects.json').then(response => {
       this.setState({ projects: response.data.projects })
     })
+  }
 
+  dance() {
     console.log(this.props.timers)
+    this.setState({
+      numTimer: this.props.timers.length,
+      data: this.props.timers
+    })
   }
 
   onAddActiveTimer() {
@@ -38,7 +40,7 @@ export default class TimerWrap extends Component {
     }).then(function (response) {
       axios.get('/timer.json').then(response => {
         let data = response.data;
-        self.setState({ data: data })
+        self.setState({ data: data.timers })
         self.setState({ numTimer: data.timers.length })
       });
     })
@@ -47,15 +49,15 @@ export default class TimerWrap extends Component {
   onRemoveTimer() {
     axios.get('/timer.json').then(response => {
       let data = response.data;
-      this.setState({ data: data })
+      this.setState({ data: data.timers })
       this.setState({ numTimer: data.timers.length })
     });
   }
 
   render() {
     const activeTimer = [];
-    const timers = this.state.data.timers;
-
+    const timers = this.state.data;
+    console.log(timers[1])
     for (let i = 0; i < this.state.numTimer; i += 1) {
       activeTimer.unshift(<Timer
                           key={i}
@@ -80,6 +82,7 @@ export default class TimerWrap extends Component {
           projects={this.state.projects}
           inputProject={(input) => this.project = input}
         />
+      <button onClick={this.dance} className="pure-button">DANCE</button>
       </section>
 
     )

@@ -1,33 +1,30 @@
-import * as types from 'actions/action-types';
+//   case types.GET_TIMER_NEW:
+//     return state;
+//
+//   case types.GET_TIMER_RUN:
+//     return state;
+//
+//   case types.GET_TIMER_PAUSE:
+//     return state;
+//
+//   case types.GET_TIMER_FINISH:
+//     return state;
+//
+//   case types.GET_TIMER_STATUS:
+//     return state;
+//
+//   case 'GET_TIMER_LIST':
+//     return state;
+// }
 
-const initialState = {
-  id: 0,
-  nakama_id: 0,
-  state: '',
-  minutes: 0,
-  seconds: 0,
-  project_id: 0,
-  comment: '',
-  timers: {}
-}
-
-const timersReducer = function(state = initialState, action) {
+const timersReducer = function(state = 0, action) {
 
   switch(action.type) {
 
-    case types.GET_TIMER_NEW:
-      return state;
+    case 'GET_TIMERS_LIST':
+      return state = action.data;
 
-    case types.GET_TIMER_RUN:
-      return state;
-
-    case types.GET_TIMER_PAUSE:
-      return state;
-
-    case types.GET_TIMER_FINISH:
-      return state;
-
-    case types.GET_TIMER_STATUS:
+    default:
       return state;
 
   }
