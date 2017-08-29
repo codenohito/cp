@@ -22,6 +22,7 @@ export default class AddTimer extends Component {
   }
 
   render () {
+
     const optionProjects = [];
     const optionLength = this.props.projects.length;
     for (let i = 0; i < optionLength; i += 1) {
@@ -55,11 +56,6 @@ export default class AddTimer extends Component {
 
         </form>
         <p><a href="#" className="pure-button" onClick={this.props.addTimer}>Add Timer</a></p>
-        <br />
-        <h2>Active timers:</h2>
-        <div>
-          {this.props.activeTimer}
-        </div>
       </div>
     );
   }
