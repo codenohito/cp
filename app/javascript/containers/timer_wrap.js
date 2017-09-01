@@ -11,7 +11,7 @@ class timerWrap extends Component {
 
     this.state = {
       projects: []
-    };
+    }
 
   }
 
@@ -22,27 +22,26 @@ class timerWrap extends Component {
     axios.get('/projects.json').then(response => {
       this.setState({ projects: response.data.projects })
     })
-
   }
 
   onAddActiveTimer() {
-      let comment = this.comment.value != null ? this.comment.value : "",
-          project = this.project.value != null ?  this.project.value : "",
-          token = document.head.querySelector("[name=csrf-token]").content,
-          self = this;
+    let comment = this.comment.value != null ? this.comment.value : "",
+        project = this.project.value != null ?  this.project.value : "",
+        token = document.head.querySelector("[name=csrf-token]").content,
+        self = this;
 
-      axios.post('/timer/new', {
-        timer: {
-          project_id: project,
-          comment: comment
-        },
-        authenticity_token: token
-      }).then(function (response) {
-        self.props.addTimer(response.data.timer);
-      })
+    axios.post('/timer/new', {
+      timer: {
+        project_id: project,
+        comment: comment
+      },
+      authenticity_token: token
+    }).then(function (response) {
+      self.props.addTimer(response.data.timer);
+    })
   }
 
-  render() {
+  renderChildrenTimers() {
     const timers = this.props.timers;
     let listTimer = null;
 
@@ -57,6 +56,10 @@ class timerWrap extends Component {
           pauseTimer={() => this.props.pauseTimer(timer.id)}
           finishTimer={() => this.props.finishTimer(timer.id)}
 
+          onActivetimer={() => this.props.getActiveTimer(timer.id)}
+          onPauseActiveTimer={() => this.props.getActiveTimer(-1)}
+          isActive={this.props.activeTimer}
+
           project={
             this.state.projects.map(project =>
               (project.id === timer.project_id) ? project.title : ''
@@ -67,6 +70,10 @@ class timerWrap extends Component {
       )
     }
 
+    return listTimer;
+  }
+
+  render() {
     return (
       <div>
         <AddTimer
@@ -77,7 +84,7 @@ class timerWrap extends Component {
         />
         <br />
         <h2>Active timers: {this.state.dance}</h2>
-        { timers.length ? listTimer : '0 active timers' }
+        { this.props.timers.length ? this.renderChildrenTimers() : '0 active timers' }
 
       </div>
     )

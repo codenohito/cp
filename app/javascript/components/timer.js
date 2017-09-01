@@ -11,21 +11,34 @@ class Timer extends Component {
       time: '',
       offset: null,
       interval: null,
+      isPause: true
     };
 
     this.play = this.play.bind(this);
     this.pause = this.pause.bind(this);
     this.finish = this.finish.bind(this);
     this.reset = this.reset.bind(this);
+    this.buttonPlay = this.buttonPlay.bind(this);
   }
 
   componentDidMount() {
-    if (this.props.state == 'running') {
+
+    if ((this.props.state == 'running') && (this.props.isActive === -1)) {
 
       this.setState({clock: this.props.minutes * 60000 + this.props.seconds * 1000});
       this.play();
+      this.props.onActivetimer()
 
-    } else if (this.props.state == 'paused') {
+    } else if (this.props.state == 'paused' && (this.props.isActive == this.props.id)) {
+
+      this.setState({clock: this.props.minutes * 60000 + this.props.seconds * 1000});
+      let time = SecondsTohhmmss((this.props.minutes * 60000 + this.props.seconds * 1000) / 1000);
+      this.setState({time: time })
+      this.play();
+
+      this.props.onActivetimer()
+
+    } else if (this.props.state == 'paused' && (this.props.isActive != this.props.id)) {
 
       this.setState({clock: this.props.minutes * 60000 + this.props.seconds * 1000})
       let time = SecondsTohhmmss((this.props.minutes * 60000 + this.props.seconds * 1000) / 1000)
@@ -34,9 +47,36 @@ class Timer extends Component {
 
     } else {
 
-      this.reset();
-      this.pause();
+      this.setState({clock: this.props.minutes * 60000 + this.props.seconds * 1000})
+      let time = SecondsTohhmmss((this.props.minutes * 60000 + this.props.seconds * 1000) / 1000)
+      this.setState({time: time })
 
+      this.setState({isPause: true})
+      clearInterval(this.state.interval)
+      this.setState({interval: null })
+
+      let requestLink = `/timer/${this.props.id}/pause`
+
+      axios.get(requestLink)
+
+      this.props.pauseTimer()
+      this.props.onPauseActiveTimer()
+      
+    }
+
+  }
+
+
+  componentWillReceiveProps(nextProps) {
+
+    if ((nextProps.isActive == nextProps.id) && (this.props.state == 'paused')) {
+      this.setState({clock: nextProps.minutes * 60000 + nextProps.seconds * 1000});
+      this.play();
+    } else if ((this.props.isActive == this.props.id) && (this.props.state == 'running')) {
+      this.setState({clock: nextProps.minutes * 60000 + nextProps.seconds * 1000});
+      this.play();
+    } else {
+      this.pause();
     }
 
   }
@@ -46,7 +86,6 @@ class Timer extends Component {
   }
 
   update() {
-
     let clock = this.state.clock
     clock += this.calculateOffset()
     this.setState({clock: clock })
@@ -55,7 +94,6 @@ class Timer extends Component {
     this.setState({time: time })
 
     document.title = this.state.time;
-
   }
 
   calculateOffset() {
@@ -71,6 +109,8 @@ class Timer extends Component {
   play() {
 
     if (!this.state.interval) {
+      this.setState({isPause: false})
+
       this.setState({offset: Date.now() })
       this.setState({interval: setInterval(this.update.bind(this), 1000) })
 
@@ -86,6 +126,7 @@ class Timer extends Component {
   pause() {
 
     if (this.state.interval) {
+      this.setState({isPause: true})
       clearInterval(this.state.interval)
       this.setState({interval: null })
 
@@ -94,8 +135,15 @@ class Timer extends Component {
       axios.get(requestLink)
 
       this.props.pauseTimer()
+      this.props.onPauseActiveTimer()
     }
 
+  }
+
+  buttonPlay() {
+
+    this.props.onActivetimer()
+    this.props.playTimer()
   }
 
   finish() {
@@ -131,7 +179,7 @@ class Timer extends Component {
     return (
       <div>
         { (this.props.state == 'finished') ? '' :
-          <div className={ (this.props.state == 'paused') ? 'react-timer' : 'react-timer react-timer-active' }>
+          <div className={ (this.state.isPause) ? 'react-timer' : 'react-timer react-timer-active' }>
             <div className="pure-u-1-3">
               <h3 className="react-timer-project">{this.props.project}</h3>
               <p className="react-timer-comment">{this.props.comment}</p>
@@ -141,7 +189,8 @@ class Timer extends Component {
               <br />
               <div className="timer-button-group">
                 <button onClick={this.pause} className="pure-button">pause</button>
-                <button onClick={this.play} className="pure-button is-button-active">play</button>
+                <button onClick={this.buttonPlay}
+                        className="pure-button is-button-active">play</button>
                 <button onClick={this.finish} className="pure-button timer-button-finish" >finish</button>
               </div>
             </div>
