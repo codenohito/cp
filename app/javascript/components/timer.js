@@ -61,7 +61,7 @@ class Timer extends Component {
 
       this.props.pauseTimer()
       this.props.onPauseActiveTimer()
-      
+
     }
 
   }
@@ -70,10 +70,10 @@ class Timer extends Component {
   componentWillReceiveProps(nextProps) {
 
     if ((nextProps.isActive == nextProps.id) && (this.props.state == 'paused')) {
-      this.setState({clock: nextProps.minutes * 60000 + nextProps.seconds * 1000});
+      // this.setState({clock: this.props.minutes * 60000 + this.props.seconds * 1000});
       this.play();
     } else if ((this.props.isActive == this.props.id) && (this.props.state == 'running')) {
-      this.setState({clock: nextProps.minutes * 60000 + nextProps.seconds * 1000});
+      // this.setState({clock: this.props.minutes * 60000 + this.props.seconds * 1000});
       this.play();
     } else {
       this.pause();
