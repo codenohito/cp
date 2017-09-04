@@ -55,7 +55,7 @@ export default class AddTimer extends Component {
           />
 
         </form>
-        <p><a href="#" className="pure-button" onClick={this.props.addTimer}>Add Timer</a></p>
+        <p><a href="#" className="pure-button pure-button-primary " onClick={this.props.addTimer}>Add Timer</a></p>
       </div>
     );
   }

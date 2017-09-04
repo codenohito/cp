@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   match 'timer/:id/finish', to: 'time_records#timer_finish', via: [:get, :post]
   get  'timer', to: 'time_records#index', as: :timer
   post 'timer', to: 'time_records#create'
+  get  'timer/:id/edit', to: 'time_records#edit', as: :edit
+  patch 'timer/:id', to: 'time_records#update', as: :update
+  get 'timer/:id/delete', to: 'time_records#destroy', as: :record_delete
 
   resources :projects, except: [:edit, :update]
 

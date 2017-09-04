@@ -16,7 +16,8 @@
             = f.select :nakama_id, options_for_select(Nakama.all.collect { |nkm| [nkm.name, nkm.id] }), include_blank: "- choose nakama -"
           = f.select :project_id, options_for_select(Project.all.collect { |prj| [prj.title, prj.id] }), include_blank: "- choose project -"
           = f.text_field :comment, placeholder: 'Comment', class: "pure-input-1-2"
-          = f.submit "Save", class: "pure-button"
+          br /
+          = f.submit "Save", class: "pure-button pure-button-primary "
 
       - if @records.any?
         h2 Records:
@@ -27,6 +28,8 @@
               .time-records-day = l record.theday, format: "%d %B %Y"
               - cur_day = record.theday
             .time-record
+              span.edit-record-wrap
+                = link_to "✎", "timer/#{record.id}/edit", class: "pure-button"
               span.tr-info-time
                 = record.amount / 60
                 | :
@@ -39,6 +42,7 @@
               ' at
               span.tr-info-project = link_to record.project.title, project_path(record.project)
               .tr-info-comment = record.comment
+              
       - else
         p Have no records
 

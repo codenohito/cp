@@ -1,0 +1,16 @@
+.holder
+  h2 Edit time record
+  = form_for @record, url: { action: 'update' }, \
+                             html: { class: 'pure-form pure-form-stacked' } do |f|
+    fieldset
+      = f.text_field :theday, placeholder: 'date (yyyy-mm-dd)'
+      = f.text_field :amount, placeholder: 'spent time (in minutes)'
+      - if current_user.admin?
+        = f.select :nakama_id, options_for_select(Nakama.all.collect { |nkm| [nkm.name, nkm.id] }), include_blank: "- choose nakama -"
+      = f.select :project_id, options_for_select(Project.all.collect { |prj| [prj.title, prj.id] }), include_blank: "- choose project -"
+      = f.text_field :comment, placeholder: 'Comment', class: "pure-input-1-2"
+      br /
+      = f.submit "Save", class: "pure-button pure-button-primary "    
+  br / 
+  h3 Delete time record   
+  = link_to "Delete", record_delete_path(@record.id), data: {:confirm => 'Are you sure?'}, class: "pure-button pure-button-error"

@@ -106,6 +106,8 @@
   }
 }
 .time-record {
+  position: relative;
+  padding-left: 20px;
   margin: 12px 0;
   .tr-info-time {
     display: inline-block;
@@ -115,4 +117,25 @@
     width: 46px;
   }
   .tr-info-comment { padding-left: 54px; }
+  .edit-record-wrap {
+    position: absolute;
+    left: 0;
+    top: 0;
+    a {
+      background-color: transparent;
+      margin-top: -12px;
+      padding-left: 0;
+      padding-right: 3em;
+      transition: all 0.1s linear;
+      opacity: 0;
+      color: rgb(0, 120, 231);
+      line-height: 24px;
+      text-decoration: none;
+      &:hover, &:focus, &:active {
+        background-image: none;
+        text-decoration: none;
+        opacity: 1;
+      }
+    }
+  }
 }

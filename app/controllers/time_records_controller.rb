@@ -44,6 +44,32 @@ class TimeRecordsController < ApplicationController
     end
   end
 
+  def edit
+    @record = TimeRecord.find params[:id]
+    unless current_user.admin?
+      @record.nakama = current_nakama
+    end
+  end
+
+  def update
+    @record = TimeRecord.find params[:id]
+    unless current_user.admin?
+      @record.nakama = current_nakama
+    end
+
+    if @record.update(time_record_params)
+      redirect_to timer_path
+    else
+      render 'edit'
+    end
+  end
+
+  def destroy
+    @record = TimeRecord.find params[:id]
+    @record.destroy
+    redirect_to timer_path
+  end
+
   def timer_run
     if params[:id].blank? || params[:id] == 'new'
       timer = Timer.new user: current_user
