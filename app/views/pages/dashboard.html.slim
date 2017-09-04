@@ -7,38 +7,39 @@
   .holder style="border: 1px solid #000;"
     h3 Short time report
     - today = Date.today
-    p
-      strong Today:
-      - @nakamas.each do |nakama|
-        br
-        span.das-nakama = "@#{nakama.name}"
-        ' :
-        = formatted_worktime nakama.time_records.where('time_records.theday = ?', today).sum(:amount)
-    p
-      strong This week:
-      - @nakamas.each do |nakama|
-        br
-        span.das-nakama = "@#{nakama.name}"
-        ' :
-        = formatted_worktime nakama.time_records.where('time_records.theday >= ? AND time_records.theday <= ?', today.beginning_of_week, today.end_of_week).sum(:amount)
-    p
-      strong Previous week:
-      - @nakamas.each do |nakama|
-        br
-        span.das-nakama = "@#{nakama.name}"
-        ' :
-        = formatted_worktime nakama.time_records.where('time_records.theday >= ? AND time_records.theday <= ?', (today - 1.week).beginning_of_week, (today - 1.week).end_of_week).sum(:amount)
-    p
-      strong This month:
-      - @nakamas.each do |nakama|
-        br
-        span.das-nakama = "@#{nakama.name}"
-        ' :
-        = formatted_worktime nakama.time_records.where('time_records.theday >= ? AND time_records.theday <= ?', today.beginning_of_month, today.end_of_month).sum(:amount)
-    p
-      strong Previous month:
-      - @nakamas.each do |nakama|
-        br
-        span.das-nakama = "@#{nakama.name}"
-        ' :
-        = formatted_worktime nakama.time_records.where('time_records.theday >= ? AND time_records.theday <= ?', (today - 1.month).beginning_of_month, (today - 1.month).end_of_month).sum(:amount)
+    div class=(current_user.admin? ? 'dashboard-wrap' : '')
+      div
+        strong Today:
+        - @nakamas.each do |nakama|
+          p
+            span.das-nakama = "@#{nakama.name}"
+            ' :
+            = formatted_worktime nakama.time_records.where('time_records.theday = ?', today).sum(:amount)
+      div
+        strong This week:
+        - @nakamas.each do |nakama|
+          p
+            span.das-nakama = "@#{nakama.name}"
+            ' :
+            = formatted_worktime nakama.time_records.where('time_records.theday >= ? AND time_records.theday <= ?', today.beginning_of_week, today.end_of_week).sum(:amount)
+      div
+        strong Previous week:
+        - @nakamas.each do |nakama|
+          p
+            span.das-nakama = "@#{nakama.name}"
+            ' :
+            = formatted_worktime nakama.time_records.where('time_records.theday >= ? AND time_records.theday <= ?', (today - 1.week).beginning_of_week, (today - 1.week).end_of_week).sum(:amount)
+      div
+        strong This month:
+        - @nakamas.each do |nakama|
+          p
+            span.das-nakama = "@#{nakama.name}"
+            ' :
+            = formatted_worktime nakama.time_records.where('time_records.theday >= ? AND time_records.theday <= ?', today.beginning_of_month, today.end_of_month).sum(:amount)
+      div
+        strong Previous month:
+        - @nakamas.each do |nakama|
+          p
+            span.das-nakama = "@#{nakama.name}"
+            ' :
+            = formatted_worktime nakama.time_records.where('time_records.theday >= ? AND time_records.theday <= ?', (today - 1.month).beginning_of_month, (today - 1.month).end_of_month).sum(:amount)

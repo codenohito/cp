@@ -3,7 +3,7 @@
   margin-left: auto;
   padding-right: 20px;
   padding-left: 20px;
-  max-width: 780px;
+  max-width: 790px;
 }
 
 .button-error {
@@ -14,4 +14,13 @@
 
 .das-nakama {
   color: #ff9231;
+}
+
+.dashboard-wrap {
+  margin: 0 -25px;
+}
+
+.dashboard-wrap > div {
+  display: inline-block;
+  margin: 20px 25px;
 }
