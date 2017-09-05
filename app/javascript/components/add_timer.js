@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import axios from 'axios'
 import SecondsTohhmmss from 'utils/SecondsTohhmmss'
 
-// React component
 export default class AddTimer extends Component {
   constructor(props) {
     super(props)
@@ -21,8 +19,7 @@ export default class AddTimer extends Component {
     this.setState({project_id: event.target.value});
   }
 
-  render () {
-
+  renderOptionSelect() {
     const optionProjects = [];
     const optionLength = this.props.projects.length;
     for (let i = 0; i < optionLength; i += 1) {
@@ -33,6 +30,10 @@ export default class AddTimer extends Component {
                              </option>);
     };
 
+    return optionProjects;
+  }
+
+  render () {
     return (
       <div>
         <form className="pure-form pure-form-stacked">
@@ -42,7 +43,7 @@ export default class AddTimer extends Component {
             ref={this.props.inputProject}>
 
             <option value="">- choose project -</option>
-            {optionProjects}
+            {this.renderOptionSelect()}
 
           </select>
           <input

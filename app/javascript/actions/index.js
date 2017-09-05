@@ -27,3 +27,9 @@ export const getActiveTimer = ( id ) => ({
   type: 'GET_ACTIVE_TIMER',
   id
 })
+
+
+export const getRecords = ( data ) => ({
+  type: 'GET_RECORDS',
+  data
+})

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import store from './store';
 import App from 'components/app';
+import _ from 'lodash';
 
 ReactDOM.render(
   <Provider store={store}>

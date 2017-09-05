@@ -13,7 +13,9 @@ class TimeRecordsController < ApplicationController
       format.json do
         render json: {
           records: @records,
-          timers: @timers.map { |timer| timer_json_data(timer) }
+          timers: @timers.map { |timer| timer_json_data(timer) },
+          isAdmin: current_user.admin?,
+          nakama: Nakama.all.collect
         }
       end
     end

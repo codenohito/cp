@@ -1,50 +1,50 @@
 .time-record-holder
-  .pure-g.time-record-layout
-    .timer-wrap.pure-u-1.pure-u-md-1-2
-      h1 Timer
-      #root
+  #root
+    / .timer-wrap.pure-u-1.pure-u-md-1-2
+    /   h1 Timer
+      
 
-    .records-wrap.pure-u-1.pure-u-md-1-2
-      h2 New time record:
-      = form_for TimeRecord.new, url: { action: 'create' }, \
-                                 html: { class: 'pure-form pure-form-stacked' } do |f|
-        fieldset
-          legend New time record:
-          = f.text_field :theday, placeholder: 'date (yyyy-mm-dd)'
-          = f.text_field :amount, placeholder: 'spent time (in minutes)'
-          - if current_user.admin?
-            = f.select :nakama_id, options_for_select(Nakama.all.collect { |nkm| [nkm.name, nkm.id] }), include_blank: "- choose nakama -"
-          = f.select :project_id, options_for_select(Project.all.collect { |prj| [prj.title, prj.id] }), include_blank: "- choose project -"
-          = f.text_field :comment, placeholder: 'Comment', class: "pure-input-1-2"
-          br /
-          = f.submit "Save", class: "pure-button pure-button-primary "
-
-      - if @records.any?
-        h2 Records:
-        .time-records
-          - cur_day = nil
-          - @records.each do |record|
-            - unless record.theday == cur_day
-              .time-records-day = l record.theday, format: "%d %B %Y"
-              - cur_day = record.theday
-            .time-record
-              span.edit-record-wrap
-                = link_to "✎", "timer/#{record.id}/edit", class: "pure-button"
-              span.tr-info-time
-                = record.amount / 60
-                | :
-                = "%02d" % (record.amount % 60)
-              - if current_user.admin?
-                span.tr-info-nakama.das-nakama
-                  | @
-                  = record.nakama.name
-                  '
-              ' at
-              span.tr-info-project = link_to record.project.title, project_path(record.project)
-              .tr-info-comment = record.comment
-              
-      - else
-        p Have no records
+  .records-wrap.pure-u-1.pure-u-md-1-2
+    h2 New time record:
+    = form_for TimeRecord.new, url: { action: 'create' }, \
+                               html: { class: 'pure-form pure-form-stacked' } do |f|
+      fieldset
+        legend New time record:
+        = f.text_field :theday, placeholder: 'date (yyyy-mm-dd)'
+        = f.text_field :amount, placeholder: 'spent time (in minutes)'
+        - if current_user.admin?
+          = f.select :nakama_id, options_for_select(Nakama.all.collect { |nkm| [nkm.name, nkm.id] }), include_blank: "- choose nakama -"
+        = f.select :project_id, options_for_select(Project.all.collect { |prj| [prj.title, prj.id] }), include_blank: "- choose project -"
+        = f.text_field :comment, placeholder: 'Comment', class: "pure-input-1-2"
+        br /
+        = f.submit "Save", class: "pure-button pure-button-primary "
+    / 
+    /   - if @records.any?
+    /     h2 Records:
+    /     .time-records
+    /       - cur_day = nil
+    /       - @records.each do |record|
+    /         - unless record.theday == cur_day
+    /           .time-records-day = l record.theday, format: "%d %B %Y"
+    /           - cur_day = record.theday
+    /         .time-record
+    /           span.edit-record-wrap
+    /             = link_to "✎", "timer/#{record.id}/edit", class: "pure-button"
+    /           span.tr-info-time
+    /             = record.amount / 60
+    /             | :
+    /             = "%02d" % (record.amount % 60)
+    /           - if current_user.admin?
+    /             span.tr-info-nakama.das-nakama
+    /               | @
+    /               = record.nakama.name
+    /               '
+    /           ' at
+    /           span.tr-info-project = link_to record.project.title, project_path(record.project)
+    /           .tr-info-comment = record.comment
+    /           
+    /   - else
+    /     p Have no records
 
 = javascript_pack_tag 'index'
 

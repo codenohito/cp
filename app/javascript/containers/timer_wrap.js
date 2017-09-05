@@ -45,30 +45,27 @@ class timerWrap extends Component {
     const timers = this.props.timers;
     let listTimer = null;
 
-    if (timers.length) {
+    listTimer = timers.map((timer, index) =>
+      <Timer
+        key={index}
+        {...timer}
 
-      listTimer = timers.map((timer, index) =>
-        <Timer
-          key={index}
-          {...timer}
+        playTimer={() => this.props.playTimer(timer.id)}
+        pauseTimer={() => this.props.pauseTimer(timer.id)}
+        finishTimer={() => this.props.finishTimer(timer.id)}
 
-          playTimer={() => this.props.playTimer(timer.id)}
-          pauseTimer={() => this.props.pauseTimer(timer.id)}
-          finishTimer={() => this.props.finishTimer(timer.id)}
+        onActivetimer={() => this.props.getActiveTimer(timer.id)}
+        onPauseActiveTimer={() => this.props.getActiveTimer(-1)}
+        isActive={this.props.activeTimer}
 
-          onActivetimer={() => this.props.getActiveTimer(timer.id)}
-          onPauseActiveTimer={() => this.props.getActiveTimer(-1)}
-          isActive={this.props.activeTimer}
+        project={
+          this.state.projects.map(project =>
+            (project.id === timer.project_id) ? project.title : ''
+          )
+        }
 
-          project={
-            this.state.projects.map(project =>
-              (project.id === timer.project_id) ? project.title : ''
-            )
-          }
-
-        />
-      )
-    }
+      />
+    )
 
     return listTimer;
   }
@@ -76,6 +73,7 @@ class timerWrap extends Component {
   render() {
     return (
       <div>
+        <h1>Timer</h1>
         <AddTimer
           projects={this.state.projects}
           addTimer={this.onAddActiveTimer.bind(this)}
@@ -83,7 +81,7 @@ class timerWrap extends Component {
           inputProject={(input) => this.project = input}
         />
         <br />
-        <h2>Active timers: {this.state.dance}</h2>
+        <h2>Active timers:</h2>
         { this.props.timers.length ? this.renderChildrenTimers() : '0 active timers' }
 
       </div>
