@@ -12,16 +12,22 @@ class recordWrap extends Component {
     this.state = {
       projects: [],
       nakama: [],
-      isAdmin: false
+      nakamaId: "",
+      isAdmin: false,
+      record: []
     }
 
   }
 
   componentDidMount() {
     axios.get('/timer.json').then(response => {
+      console.log(response.data.records)
       this.props.getRecords(response.data.records)
-      this.setState({ isAdmin: response.data.isAdmin ? true : false })
-      this.setState({ nakama: response.data.nakama })
+
+      this.setState({ isAdmin: response.data.isAdmin ? true : false,
+                      nakama: response.data.nakama,
+                      nakamaId: response.data.nakamaId
+                    })
     });
     axios.get('/projects.json').then(response => {
       this.setState({ projects: response.data.projects })
@@ -61,6 +67,16 @@ class recordWrap extends Component {
     return listRecord
   }
 
+  randomEvent() {
+    this.props.getRecords(this.state.record)
+    this.renderChildrenRecords()
+  }
+
+  addRecord(newState) {
+    this.setState({record: newState})
+    this.randomEvent()
+  }
+
   render() {
     return (
       <div>
@@ -68,13 +84,20 @@ class recordWrap extends Component {
           <NewRecord
             inputTheday={(input) => this.theday = input}
             inputAmount={(input) => this.amount = input}
-            amount={0}
+            inputProject={(input) => this.project = input}
+            inputNakama={(input) => this.nakama = input}
+            inputComment={(input) => this.comment = input}
+            newRecord={this.props.newRecord}
+            projects={this.state.projects}
+            nakama={this.state.nakama}
+            nakamaId={this.state.nakamaId}
+            isAdmin={this.state.isAdmin}
+            addRecord={(newState) => this.addRecord(newState)}
           />
         <h2>Records:</h2>
         <div className="time-records">
           { this.props.records.length ? this.renderChildrenRecords() : 'Have no records' }
         </div>
-
       </div>
     )
   }
@@ -82,7 +105,8 @@ class recordWrap extends Component {
 
 function mapStateToProps(state) {
   return {
-    records: state.recordsState
+    records: state.recordsState,
+    newRecord: state.newRecordState
   }
 }
 

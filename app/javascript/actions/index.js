@@ -28,8 +28,12 @@ export const getActiveTimer = ( id ) => ({
   id
 })
 
-
 export const getRecords = ( data ) => ({
   type: 'GET_RECORDS',
   data
+})
+
+export const setAmount = ( amount ) => ({
+  type: 'SET_AMOUNT',
+  amount
 })
