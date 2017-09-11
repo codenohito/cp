@@ -7,7 +7,7 @@ class Record extends Component {
   }
 
   renderMinutes() {
-    let minutes = Math.round(this.props.amount % 60);
+    let minutes = Math.floor(this.props.amount % 60);
     return minutes < 10 ? ("0" + minutes) : minutes;
   }
 
@@ -55,7 +55,7 @@ class Record extends Component {
             <a href={"timer/" + this.props.id + "/edit"} className="pure-button">✎</a>
           </span>
           <span className="tr-info-time">
-            {Math.round(this.props.amount / 60)}
+            {Math.floor(this.props.amount / 60)}
             :
             {this.renderMinutes()}
           </span>

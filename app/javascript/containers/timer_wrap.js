@@ -24,7 +24,7 @@ class timerWrap extends Component {
     })
   }
 
-  onAddActiveTimer() {
+  onAddActiveTimer(event) {
     let comment = this.comment.value != null ? this.comment.value : "",
         project = this.project.value != null ?  this.project.value : "",
         token = document.head.querySelector("[name=csrf-token]").content,
@@ -39,6 +39,7 @@ class timerWrap extends Component {
     }).then(function (response) {
       self.props.addTimer(response.data.timer);
     })
+    event.preventDefault();
   }
 
   setFinishAmountTimer(newData) {

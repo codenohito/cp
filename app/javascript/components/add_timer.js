@@ -54,11 +54,11 @@ export default class AddTimer extends Component {
             onChange={this.handleChangeComment}
             ref={this.props.inputComment}
           />
-
+          <p>
+            <button className="pure-button pure-button-primary">Add Timer</button>
+          </p>
         </form>
-        <p>
-          <button className="pure-button pure-button-primary">Add Timer</button>
-        </p>
+
     </div>
     );
   }

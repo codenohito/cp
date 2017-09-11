@@ -4,20 +4,20 @@
     /   h1 Timer
       
 
-  .records-wrap.pure-u-1.pure-u-md-1-2
-    h2 New time record:
-    = form_for TimeRecord.new, url: { action: 'create' }, \
-                               html: { class: 'pure-form pure-form-stacked' } do |f|
-      fieldset
-        legend New time record:
-        = f.text_field :theday, placeholder: 'date (yyyy-mm-dd)'
-        = f.text_field :amount, placeholder: 'spent time (in minutes)'
-        - if current_user.admin?
-          = f.select :nakama_id, options_for_select(Nakama.all.collect { |nkm| [nkm.name, nkm.id] }), include_blank: "- choose nakama -"
-        = f.select :project_id, options_for_select(Project.all.collect { |prj| [prj.title, prj.id] }), include_blank: "- choose project -"
-        = f.text_field :comment, placeholder: 'Comment', class: "pure-input-1-2"
-        br /
-        = f.submit "Save", class: "pure-button pure-button-primary "
+  / .records-wrap.pure-u-1.pure-u-md-1-2
+  /   h2 New time record:
+  /   = form_for TimeRecord.new, url: { action: 'create' }, \
+  /                              html: { class: 'pure-form pure-form-stacked' } do |f|
+  /     fieldset
+  /       legend New time record:
+  /       = f.text_field :theday, placeholder: 'date (yyyy-mm-dd)'
+  /       = f.text_field :amount, placeholder: 'spent time (in minutes)'
+  /       - if current_user.admin?
+  /         = f.select :nakama_id, options_for_select(Nakama.all.collect { |nkm| [nkm.name, nkm.id] }), include_blank: "- choose nakama -"
+  /       = f.select :project_id, options_for_select(Project.all.collect { |prj| [prj.title, prj.id] }), include_blank: "- choose project -"
+  /       = f.text_field :comment, placeholder: 'Comment', class: "pure-input-1-2"
+  /       br /
+  /       = f.submit "Save", class: "pure-button pure-button-primary "
     / 
     /   - if @records.any?
     /     h2 Records:

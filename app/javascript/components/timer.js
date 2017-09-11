@@ -153,7 +153,7 @@ class Timer extends Component {
     axios.get(requestLink)
 
     let data = {
-      amount: Math.round(this.state.clock / 60000),
+      amount: Math.floor(this.state.clock / 60000),
       project_id: this.props.project_id,
       comment:  this.props.comment,
     }
