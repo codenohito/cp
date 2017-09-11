@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import Record from 'components/record'
 import NewRecord from 'components/new_timer_record'
-import { getRecords } from 'actions';
+import { getRecords, addRecord } from 'actions';
 
 class recordWrap extends Component {
   constructor(props) {
@@ -17,11 +17,12 @@ class recordWrap extends Component {
       record: []
     }
 
+    this.setNewRecord = this.setNewRecord.bind(this);
+
   }
 
   componentDidMount() {
     axios.get('/timer.json').then(response => {
-      console.log(response.data.records)
       this.props.getRecords(response.data.records)
 
       this.setState({ isAdmin: response.data.isAdmin ? true : false,
@@ -67,14 +68,13 @@ class recordWrap extends Component {
     return listRecord
   }
 
-  randomEvent() {
-    this.props.getRecords(this.state.record)
-    this.renderChildrenRecords()
+  setNewRecord() {
+    this.props.addRecord(this.state.record[0])
   }
 
   addRecord(newState) {
     this.setState({record: newState})
-    this.randomEvent()
+    this.setNewRecord()
   }
 
   render() {
@@ -112,7 +112,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getRecords: (data) => dispatch(getRecords(data))
+    getRecords: (data) => dispatch(getRecords(data)),
+    addRecord: (data) => dispatch(addRecord(data))
   }
 }
 

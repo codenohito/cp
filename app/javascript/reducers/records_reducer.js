@@ -2,12 +2,16 @@ const recordsReducer = function(state = [], action) {
 
   switch(action.type) {
     case 'GET_RECORDS':
-      let arr = state;
-      for (let i = 0; i < action.data.length ;i++) {
-        arr.unshift(action.data[i])
+      let data = [ ...state, ];
+      for (let i = 0; i < action.data.length; i++) {
+        data.push( action.data[i] );
       }
-      console.log(arr)
-      return arr.reverse();
+      return data
+
+    case 'ADD_RECORD':
+      let addRecord = [ ...state, ];
+      addRecord.unshift( action.data );
+      return addRecord
 
     default:
       return state;

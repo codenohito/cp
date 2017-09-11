@@ -1,15 +1,17 @@
 const initialState = {
   amount: "",
-  projectId: 0,
-  nakamaId: "",
+  project_id: 0,
   comment: ""
 };
 
 const newRecordReducer = function(state = initialState, action) {
 
   switch(action.type) {
-    case 'SET_AMOUNT':
-      return _.assign(state, { amount: action.amount });
+    case 'SET_NEW_RECORD':
+      return action.data;
+
+    case 'GET_NEW_RECORD':
+      return state;
 
     default:
       return state;

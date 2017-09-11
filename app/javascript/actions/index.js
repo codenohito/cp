@@ -33,7 +33,16 @@ export const getRecords = ( data ) => ({
   data
 })
 
-export const setAmount = ( amount ) => ({
-  type: 'SET_AMOUNT',
-  amount
+export const addRecord = ( data ) => ({
+  type: 'ADD_RECORD',
+  data
+})
+
+export const getNewRecord = () => ({
+  type: 'GET_NEW_RECORD'
+})
+
+export const setNewRecord = ( data ) => ({
+  type: 'SET_NEW_RECORD',
+  data
 })

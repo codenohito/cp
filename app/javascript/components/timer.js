@@ -152,15 +152,17 @@ class Timer extends Component {
     let requestLink = `/timer/${this.props.id}/finish`
     axios.get(requestLink)
 
-    let elTimeRecord = document.getElementById('time_record_amount'),
-        elProjectRecord = document.getElementById('time_record_project_id'),
-        elCommentRecord = document.getElementById('time_record_comment');
+    let data = {
+      amount: Math.round(this.state.clock / 60000),
+      project_id: this.props.project_id,
+      comment:  this.props.comment,
+    }
 
-    elTimeRecord.value = Math.round(this.state.clock / 60000)
-    elProjectRecord.value = this.props.project_id
-    elCommentRecord.value = this.props.comment
+    this.props.getFinishData(data);
 
     this.props.finishTimer()
+
+
   }
 
   reset() {

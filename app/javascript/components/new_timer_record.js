@@ -10,7 +10,7 @@ export default class NewRecord extends Component {
     this.state = {
       theday: newDate,
       amount: this.props.newRecord.amount,
-      project: this.props.newRecord.projectId,
+      project: this.props.newRecord.project_id,
       nakama: this.props.nakamaId,
       comment: this.props.newRecord.comment
     };
@@ -24,6 +24,12 @@ export default class NewRecord extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({nakama: nextProps.nakamaId});
+
+    this.setState({
+      amount: nextProps.newRecord.amount,
+      project: nextProps.newRecord.project_id,
+      comment: nextProps.newRecord.comment
+    })
   }
 
   handleChangeTheday(event) {

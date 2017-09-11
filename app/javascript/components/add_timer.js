@@ -36,7 +36,7 @@ export default class AddTimer extends Component {
   render () {
     return (
       <div>
-        <form className="pure-form pure-form-stacked">
+        <form onSubmit={this.props.addTimer} className="pure-form pure-form-stacked">
           <select
             value={this.state.project_id}
             onChange={this.handleChangeProject}
@@ -56,8 +56,10 @@ export default class AddTimer extends Component {
           />
 
         </form>
-        <p><a href="#" className="pure-button pure-button-primary " onClick={this.props.addTimer}>Add Timer</a></p>
-      </div>
+        <p>
+          <button className="pure-button pure-button-primary">Add Timer</button>
+        </p>
+    </div>
     );
   }
 }

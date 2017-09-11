@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import axios from 'axios'
 import Timer from 'components/timer'
 import AddTimer from 'components/add_timer'
-import { getTimers, playTimer, pauseTimer, finishTimer, addTimer, getActiveTimer } from 'actions';
+import { getTimers, playTimer, pauseTimer, finishTimer, addTimer, getActiveTimer, setNewRecord, getNewRecord } from 'actions';
 
 class timerWrap extends Component {
   constructor(props) {
@@ -12,7 +12,7 @@ class timerWrap extends Component {
     this.state = {
       projects: []
     }
-
+    this.setFinishAmountTimer = this.setFinishAmountTimer.bind(this)
   }
 
   componentDidMount() {
@@ -41,6 +41,10 @@ class timerWrap extends Component {
     })
   }
 
+  setFinishAmountTimer(newData) {
+    this.props.setNewRecord(newData)
+  }
+
   renderChildrenTimers() {
     const timers = this.props.timers;
     let listTimer = null;
@@ -63,6 +67,8 @@ class timerWrap extends Component {
             (project.id === timer.project_id) ? project.title : ''
           )
         }
+
+        getFinishData={(newData) => this.setFinishAmountTimer(newData)}
 
       />
     )
@@ -93,7 +99,8 @@ class timerWrap extends Component {
 function mapStateToProps(state) {
   return {
     timers: state.timersState,
-    activeTimer: state.activeTimerState
+    activeTimer: state.activeTimerState,
+    newRecord: state.newRecordState
   }
 }
 
@@ -105,6 +112,8 @@ function mapDispatchToProps(dispatch) {
     finishTimer: (id) => dispatch(finishTimer(id)),
     addTimer: (data) => dispatch(addTimer(data)),
     getActiveTimer: (id) => dispatch(getActiveTimer(id)),
+    setNewRecord: (data) => dispatch(setNewRecord(data)),
+    getNewRecord: () => dispatch(getNewRecord())
   }
 }
 
