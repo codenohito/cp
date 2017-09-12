@@ -2,17 +2,17 @@ Rails.application.routes.draw do
   devise_for :users
   get 'money', to: 'money_records#index', as: :money
 
-  get 'timer/weekly', to: 'time_records#weekly_report', as: :timer_weekly
-  get 'timer/report', to: 'time_records#report', as: :timer_report
-  match 'timer/new',        to: 'time_records#timer_run',    via: [:get, :post]
-  match 'timer/:id/run',    to: 'time_records#timer_run',    via: [:get, :post]
-  match 'timer/:id/pause',  to: 'time_records#timer_pause',  via: [:get, :post]
-  match 'timer/:id/finish', to: 'time_records#timer_finish', via: [:get, :post]
-  get  'timer', to: 'time_records#index', as: :timer
-  post 'timer', to: 'time_records#create'
-  get  'timer/:id/edit', to: 'time_records#edit', as: :edit
-  patch 'timer/:id', to: 'time_records#update', as: :update
-  get 'timer/:id/delete', to: 'time_records#destroy', as: :record_delete
+  scope 'timer' do
+    resources :records, controller: 'time_records', except: [:new, :show]
+    # get 'timer/records/weekly', to: 'time_records#weekly_report', as: :timer_weekly
+
+    post   ':id/finish', to: 'timers#destroy'
+    delete ':id',        to: 'timers#destroy'
+    post   ':id/:act',   to: 'timers#update', constraints: { act10n: /play|pause/ }
+    match  ':id',        to: 'timers#update',  via: [:post, :patch, :put]
+    post   '/',          to: 'timers#create'
+    get    '/',          to: 'timers#index', as: :timers
+  end
 
   resources :projects, except: [:edit, :update]
 

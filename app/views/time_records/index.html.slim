@@ -1,121 +1,45 @@
-.time-record-holder
-  #root
-    / .timer-wrap.pure-u-1.pure-u-md-1-2
-    /   h1 Timer
-      
-
-  / .records-wrap.pure-u-1.pure-u-md-1-2
-  /   h2 New time record:
-  /   = form_for TimeRecord.new, url: { action: 'create' }, \
-  /                              html: { class: 'pure-form pure-form-stacked' } do |f|
-  /     fieldset
-  /       legend New time record:
-  /       = f.text_field :theday, placeholder: 'date (yyyy-mm-dd)'
-  /       = f.text_field :amount, placeholder: 'spent time (in minutes)'
-  /       - if current_user.admin?
-  /         = f.select :nakama_id, options_for_select(Nakama.all.collect { |nkm| [nkm.name, nkm.id] }), include_blank: "- choose nakama -"
-  /       = f.select :project_id, options_for_select(Project.all.collect { |prj| [prj.title, prj.id] }), include_blank: "- choose project -"
-  /       = f.text_field :comment, placeholder: 'Comment', class: "pure-input-1-2"
-  /       br /
-  /       = f.submit "Save", class: "pure-button pure-button-primary "
-    / 
-    /   - if @records.any?
-    /     h2 Records:
-    /     .time-records
-    /       - cur_day = nil
-    /       - @records.each do |record|
-    /         - unless record.theday == cur_day
-    /           .time-records-day = l record.theday, format: "%d %B %Y"
-    /           - cur_day = record.theday
-    /         .time-record
-    /           span.edit-record-wrap
-    /             = link_to "✎", "timer/#{record.id}/edit", class: "pure-button"
-    /           span.tr-info-time
-    /             = record.amount / 60
-    /             | :
-    /             = "%02d" % (record.amount % 60)
-    /           - if current_user.admin?
-    /             span.tr-info-nakama.das-nakama
-    /               | @
-    /               = record.nakama.name
-    /               '
-    /           ' at
-    /           span.tr-info-project = link_to record.project.title, project_path(record.project)
-    /           .tr-info-comment = record.comment
-    /           
-    /   - else
-    /     p Have no records
-
-= javascript_pack_tag 'index'
-
-// - - - Timer API: - - -
-/
-/ Methods:
-/
-/   GET /timer.json
-/     Index of time records and timers.
-/     params: none
-/     return: {
-/       "records": <array of existed time records data>,
-/       "timers": <array of runned and paused timers data>
-/     }
-/
-/   POST /timer.json
-/     Create a new time record
-/     params: look in time_records_controller.rb method time_record_params
-/     return:
-/       if success: {"success":true,"record_id":<ID>}
-/       if fault: {
-/         "success":false,
-/         "errors":{
-/           <field_name>:<array of error messages>,
-/           ...
-/         }
-/       }
-/
-/   GET or POST /timer/new
-/   GET or POST /timer/new/run
-/     Run a new timer.
-/     params: look in time_records_controller.rb method timer_params
-/     return: {"timer":<created timer data>}
-/
-/   GET or POST /timer/:id/pause
-/     Pause timer.
-/     params: none, only correct timer id in url
-/     return: {"timer":<timer data>}
-/
-/   GET or POST /timer/:id/run
-/     Resume paused timer.
-/     params: none, only correct timer id in url
-/     return: {"timer":<timer data>}
-/
-/   GET or POST /timer/:id/finish
-/     Finish timer. Warning: the timer will be destroyed!
-/     You can use this method to discard timer too.
-/     params: none, only correct timer id in url
-/     return: {"timer":<timer data>}
-/
-/ Data examples:
-/
-/   example of time record data:
-/   {
-/     "id":1,
-/     "theday":"2017-08-10",
-/     "amount":40,                 / - time in minutes
-/     "nakama_id":1,
-/     "project_id":1,
-/     "comment":"Столы двигал, голым прыгал",
-/     "created_at":"2017-08-10T17:59:32.866+07:00",
-/     "updated_at":"2017-08-10T17:59:32.866+07:00"
-/   }
-/
-/   example of timer data:
-/   {
-/     "id":22,
-/     "nakama_id":4,
-/     "state":"running",  / - possible values: running, paused, finished
-/     "minutes":3,
-/     "seconds":31,
-/     "project_id":12,
-/     "comment":"Making news"
-/   }
+.holder
+  h1 Time report
+  form.pure-form.pure-form-stacked.report-filter
+    fieldset
+      legend Filter
+      .pure-g
+        .pure-u-1.pure-u-md-1-4
+          label for="project-name" Project name
+          select#project-name
+            option all
+            - @projects.each do |project|
+              option = project.title
+        .pure-u-1.pure-u-md-1-4
+          label for="nakama-name" Nakama
+          select#nakama-name
+            option all
+            - @nakamas.each do |nakama|
+              option = "@#{nakama.name}"
+        .pure-u-1.pure-u-md-1-4
+          label for="from-day" From day
+          input#from-day.pure-u-23-24 type="text" /
+        .pure-u-1.pure-u-md-1-4
+          label for="to-day" To day
+          input#to-day.pure-u-23-24 type="text" /  
+      button.pure-button.pure-button-primary type="submit"  Apply!
+  p
+    ' From day:
+    = l @from_day, format: "%e %B %Y"
+    ' ,
+    ' to day:
+    = l @to_day, format: "%e %B %Y"
+  .table-report-wrap.pure-table-responsive-wrap  
+    table.pure-table-bordered.pure-table
+      thead
+        tr
+          th Projects
+          - @nakamas.each do |nakama|
+            th.das-nakama = "@#{nakama.name}"
+      tbody
+        - @projects.each do |project|
+          tr
+            td = project.title
+            - @nakamas.each do |nakama|
+              td class=((nakama.time_records.where(project: project).where('time_records.theday >= ? AND time_records.theday <= ?', @from_day, @to_day).sum(:amount) == 0) ? 'inactive-worktimer' : 'active-worktimer')
+                = formatted_worktime nakama.time_records.where(project: project).where('time_records.theday >= ? AND time_records.theday <= ?', @from_day, @to_day).sum(:amount)
