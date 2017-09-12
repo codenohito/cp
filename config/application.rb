@@ -6,6 +6,8 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+require File.expand_path('../../lib/actions_logger.rb', __FILE__)
+
 module CodenohitoCP
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
@@ -16,5 +18,8 @@ module CodenohitoCP
     # -- all .rb files in that directory are automatically loaded.
 
     config.time_zone = 'Krasnoyarsk'
+
+    config.actions_logger = Logger.new(
+      File.join(Rails.root, 'log', 'actions.log'))
   end
 end

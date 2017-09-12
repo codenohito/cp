@@ -30,6 +30,8 @@ class TimeRecordsController < ApplicationController
 
     success = @record.save
 
+    ActionsLogger.add 'create', @record, current_user if success
+
     respond_to do |format|
       format.html do
         unless success
@@ -50,17 +52,22 @@ class TimeRecordsController < ApplicationController
   def edit
     @record = TimeRecord.find params[:id]
     unless current_user.admin?
-      @record.nakama = current_nakama
+      if @record.nakama != current_nakama
+        raise ActiveRecord::RecordNotFound, "Record not found"
+      end
     end
   end
 
   def update
     @record = TimeRecord.find params[:id]
+
+    prm_params = time_record_params
     unless current_user.admin?
-      @record.nakama = current_nakama
+      prm_params[:nakama_id] = current_nakama ? current_nakama.id : nil
     end
 
-    if @record.update(time_record_params)
+    if @record.update(prm_params)
+      ActionsLogger.add 'update', @record, current_user
       redirect_to timer_path
     else
       render 'edit'
@@ -69,7 +76,13 @@ class TimeRecordsController < ApplicationController
 
   def destroy
     @record = TimeRecord.find params[:id]
+    unless current_user.admin?
+      if @record.nakama != current_nakama
+        raise ActiveRecord::RecordNotFound, "Record not found"
+      end
+    end
     @record.destroy
+    ActionsLogger.add 'destroy', @record, current_user
     redirect_to timer_path
   end
 
