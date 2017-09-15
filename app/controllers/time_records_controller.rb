@@ -2,17 +2,22 @@ class TimeRecordsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @nakamas = current_user.admin? ? Nakama.order(id: :asc).to_a : [current_nakama]
-    @projects = Project.ordered
+    @avl_nakamas = Nakama.accessible_by(current_ability, :read).ordered
+    @avl_projects = Project.accessible_by(current_ability, :read).ordered
+
     today = Date.today
-    @from_day = today.beginning_of_month
-    @to_day = today.end_of_month
+    @filter = {
+      from_day: today.beginning_of_month,
+      to_day: today.end_of_month,
+      project_ids: [],
+      nakama_ids: []
+    }
   end
 
   def weekly_report
     the_day_in_the_week = Date.today
-    @nakamas = current_user.admin? ? Nakama.order(id: :asc).to_a : [current_nakama]
-    @projects = Project.ordered
+    @nakamas = Nakama.accessible_by(current_ability, :read).ordered
+    @projects = Project.accessible_by(current_ability, :read).ordered
     if params[:weeks_before].present?
       the_day_in_the_week = the_day_in_the_week - params[:weeks_before].to_i.weeks
     end
@@ -21,25 +26,35 @@ class TimeRecordsController < ApplicationController
 
   def create
     @record = TimeRecord.new(time_record_params)
-    unless current_user.admin?
-      @record.nakama = current_nakama
-    end
+    @record.nakama = current_nakama if cannot? :change_nakama, @record
 
-    success = @record.save
+    if can? :create, @record
+      success = @record.save
 
-    ActionsLogger.add 'create', @record, current_user if success
+      ActionsLogger.add 'create', @record, current_user if success
 
-    respond_to do |format|
-      format.html do
-        unless success
-          flash[:alert] = 'Record is not created'
+      respond_to do |format|
+        format.html do
+          flash[:alert] = 'Record is not created' unless success
+          redirect_to action: :index
         end
-        redirect_to action: :index
+        format.json do
+          if success
+            render json: { success: true, record_id: @record.id }
+          else
+            render json: { success: false, errors: @record.errors.messages }
+          end
+        end
       end
-      format.json do
-        if success
-          render json: { success: true, record_id: @record.id }
-        else
+    else
+      respond_to do |format|
+        validate_with_abilities
+        format.html do
+          er_msgs = @record.errors[:access].join('. ')
+          flash[:alert] = "Access denied" + (er_msgs.present? ? ": #{er_msgs}" : '')
+          redirect_to action: :index
+        end
+        format.json do
           render json: { success: false, errors: @record.errors.messages }
         end
       end
@@ -48,38 +63,39 @@ class TimeRecordsController < ApplicationController
 
   def edit
     @record = TimeRecord.find params[:id]
-    unless current_user.admin?
-      if @record.nakama != current_nakama
-        raise ActiveRecord::RecordNotFound, "Record not found"
-      end
-    end
+    authorize! :read, @record
   end
 
   def update
     @record = TimeRecord.find params[:id]
+    if can? :update, @record
+      prm_params = time_record_params
+      prm_params.delete :nakama_id if cannot? :change_nakama, @record
 
-    prm_params = time_record_params
-    unless current_user.admin?
-      prm_params[:nakama_id] = current_nakama ? current_nakama.id : nil
-    end
-
-    if @record.update(prm_params)
-      ActionsLogger.add 'update', @record, current_user
-      redirect_to timers_path
+      if @record.update(prm_params)
+        ActionsLogger.add 'update', @record, current_user
+        redirect_to timers_path
+      else
+        render 'edit'
+      end
     else
-      render 'edit'
+      validate_with_abilities
+      er_msgs = @record.errors[:access].join('. ')
+      flash[:alert] = "Access denied" + (er_msgs.present? ? ": #{er_msgs}" : '')
+      redirect_to timers_path
     end
   end
 
   def destroy
     @record = TimeRecord.find params[:id]
-    unless current_user.admin?
-      if @record.nakama != current_nakama
-        raise ActiveRecord::RecordNotFound, "Record not found"
-      end
+    if can? :destroy, @record
+      @record.destroy
+      ActionsLogger.add 'destroy', @record, current_user
+    else
+      validate_with_abilities
+      er_msgs = @record.errors[:access].join('. ')
+      flash[:alert] = "Access denied" + (er_msgs.present? ? ": #{er_msgs}" : '')
     end
-    @record.destroy
-    ActionsLogger.add 'destroy', @record, current_user
     redirect_to timers_path
   end
 
@@ -88,5 +104,11 @@ class TimeRecordsController < ApplicationController
   def time_record_params
     params.require(:time_record).permit(:theday, :amount, :nakama_id,
                                         :project_id, :comment)
+  end
+
+  def validate_with_abilities
+    if cannot?(:work_with_expired, @record) && (@record.theday <= Date.today - 1.week)
+      @record.errors[:access] << 'You cannot manage time records older than week'
+    end
   end
 end

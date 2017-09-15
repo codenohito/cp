@@ -30,7 +30,7 @@ html
                   li.pure-menu-item role="presentation" = link_to 'Sign out', destroy_user_session_path, method: :delete, class: 'pure-menu-link', role: 'menuitem'
 
       - if flash[:alert].present?
-        p = flash[:alert]
+        .flash-alert = flash[:alert]
 
       = yield
 

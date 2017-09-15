@@ -1,45 +1,36 @@
 .holder
   h1 Time report
-  form.pure-form.pure-form-stacked.report-filter
+
+  = form_tag time_records_path, method: 'get', :class => 'pure-form pure-form-stacked report-filter'
     fieldset
       legend Filter
       .pure-g
         .pure-u-1.pure-u-md-1-4
-          label for="project-name" Project name
-          select#project-name
-            option all
-            - @projects.each do |project|
-              option = project.title
+          = label_tag 'project_ids', 'Projects'
+          = select_tag 'project_ids', options_from_collection_for_select(@avl_projects, "id", "title", @filter[:project_ids]), multiple: true, include_blank: false
+        - if @avl_nakamas.length > 1
+          .pure-u-1.pure-u-md-1-4
+            = label_tag 'nakama_ids', 'Nakamas'
+            = select_tag 'nakama_ids', options_from_collection_for_select(@avl_nakamas, "id", "name", @filter[:nakama_ids]), multiple: true, include_blank: false
         .pure-u-1.pure-u-md-1-4
-          label for="nakama-name" Nakama
-          select#nakama-name
-            option all
-            - @nakamas.each do |nakama|
-              option = "@#{nakama.name}"
+          = label_tag 'from_day'
+          = date_field_tag 'from_day', @filter[:from_day], :class => 'pure-u-23-24'
         .pure-u-1.pure-u-md-1-4
-          label for="from-day" From day
-          input#from-day.pure-u-23-24 type="text" /
-        .pure-u-1.pure-u-md-1-4
-          label for="to-day" To day
-          input#to-day.pure-u-23-24 type="text" /  
-      button.pure-button.pure-button-primary type="submit"  Apply!
-  p
-    ' From day:
-    = l @from_day, format: "%e %B %Y"
-    ' ,
-    ' to day:
-    = l @to_day, format: "%e %B %Y"
-  .table-report-wrap.pure-table-responsive-wrap  
+          = label_tag 'to_day'
+          = date_field_tag 'to_day', @filter[:to_day], :class => 'pure-u-23-24'
+      button.pure-button.pure-button-primary type="submit" Apply!
+
+  .table-report-wrap.pure-table-responsive-wrap
     table.pure-table-bordered.pure-table
       thead
         tr
           th Projects
-          - @nakamas.each do |nakama|
+          - @avl_nakamas.each do |nakama|
             th.das-nakama = "@#{nakama.name}"
       tbody
-        - @projects.each do |project|
+        - @avl_projects.each do |project|
           tr
             td = project.title
-            - @nakamas.each do |nakama|
-              td class=((nakama.time_records.where(project: project).where('time_records.theday >= ? AND time_records.theday <= ?', @from_day, @to_day).sum(:amount) == 0) ? 'inactive-worktimer' : 'active-worktimer')
-                = formatted_worktime nakama.time_records.where(project: project).where('time_records.theday >= ? AND time_records.theday <= ?', @from_day, @to_day).sum(:amount)
+            - @avl_nakamas.each do |nakama|
+              td class=((nakama.time_records.where(project: project).where('time_records.theday >= ? AND time_records.theday <= ?', @filter[:from_day], @filter[:to_day]).sum(:amount) == 0) ? 'inactive-worktimer' : 'active-worktimer')
+                = formatted_worktime nakama.time_records.where(project: project).where('time_records.theday >= ? AND time_records.theday <= ?', @filter[:from_day], @filter[:to_day]).sum(:amount)

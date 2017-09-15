@@ -4,4 +4,6 @@ class Nakama < ApplicationRecord
   has_many :time_records, inverse_of: :nakama, dependent: :destroy
 
   validates :name, presence: true
+
+  scope :ordered, -> { order(id: :asc) }
 end
