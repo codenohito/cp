@@ -1,5 +1,6 @@
 class TimersController < ApplicationController
   before_action :authenticate_user!
+  protect_from_forgery except: [:update, :destroy, :create]
 
   def index
     respond_to do |format|
@@ -32,13 +33,17 @@ class TimersController < ApplicationController
 
   def update
     timer = current_user.timers.find params[:id]
-    if params[:act] == 'play' && timer.started_at.nil?
-      timer.started_at = Time.now
-      timer.save
-    elsif params[:act] == 'pause' && timer.started_at.present?
-      timer.seconds = timer.seconds.to_i + (Time.now - timer.started_at).to_i
-      timer.started_at = nil
-      timer.save
+    if params[:act] == 'play'
+      if timer.started_at.nil?
+        timer.started_at = Time.now
+        timer.save
+      end
+    elsif params[:act] == 'pause'
+      if timer.started_at.present?
+        timer.seconds = timer.seconds.to_i + (Time.now - timer.started_at).to_i
+        timer.started_at = nil
+        timer.save
+      end
     else
       timer.update(timer_params)
     end

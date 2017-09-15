@@ -57,7 +57,7 @@ class Timer extends Component {
 
       let requestLink = `/timer/${this.props.id}/pause`
 
-      axios.get(requestLink)
+      axios.post(requestLink)
 
       this.props.pauseTimer()
       this.props.onPauseActiveTimer()
@@ -112,9 +112,9 @@ class Timer extends Component {
       this.setState({offset: Date.now() })
       this.setState({interval: setInterval(this.update.bind(this), 1000) })
 
-      let requestLink = `/timer/${this.props.id}/run`
+      let requestLink = `/timer/${this.props.id}/play`
 
-      axios.get(requestLink)
+      axios.post(requestLink)
 
       this.props.playTimer()
     }
@@ -130,7 +130,7 @@ class Timer extends Component {
 
       let requestLink = `/timer/${this.props.id}/pause`
 
-      axios.get(requestLink)
+      axios.post(requestLink)
 
       this.props.pauseTimer()
       this.props.onPauseActiveTimer()
@@ -149,8 +149,8 @@ class Timer extends Component {
     clearInterval(this.state.interval)
     this.setState({interval: null })
 
-    let requestLink = `/timer/${this.props.id}/finish`
-    axios.get(requestLink)
+    let requestLink = `/timer/${this.props.id}/finish.json`
+    axios.post(requestLink)
 
     let data = {
       amount: Math.floor(this.state.clock / 60000),

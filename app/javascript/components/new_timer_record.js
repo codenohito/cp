@@ -65,7 +65,7 @@ export default class NewRecord extends Component {
       utf8: "✓"
     };
 
-    axios.post('/timer.json', props
+    axios.post('/timer/records.json', props
     ).then(function (response) {
       let record = [{
         theday: self.state.theday != null ? self.state.theday : "",

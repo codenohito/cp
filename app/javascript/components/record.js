@@ -52,7 +52,7 @@ class Record extends Component {
         </div>
         <div className="time-record">
           <span className="edit-record-wrap">
-            <a href={"timer/" + this.props.id + "/edit"} className="pure-button">✎</a>
+            <a href={"/timer/records/" + this.props.id + "/edit"} className="pure-button">✎</a>
           </span>
           <span className="tr-info-time">
             {Math.floor(this.props.amount / 60)}

@@ -30,7 +30,7 @@ class timerWrap extends Component {
         token = document.head.querySelector("[name=csrf-token]").content,
         self = this;
 
-    axios.post('/timer/new', {
+    axios.post('/timer.json', {
       timer: {
         project_id: project,
         comment: comment

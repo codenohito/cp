@@ -10,7 +10,7 @@
       = f.select :project_id, options_for_select(Project.all.collect { |prj| [prj.title, prj.id] }, @record.project.id), include_blank: "- choose project -"
       = f.text_field :comment, placeholder: 'Comment', class: "pure-input-1-2"
       br /
-      = f.submit "Save", class: "pure-button pure-button-primary "    
-  br / 
-  h3 Delete time record   
-  = link_to "Delete", record_delete_path(@record.id), data: {:confirm => 'Are you sure?'}, class: "pure-button pure-button-error"
+      = f.submit "Save", class: "pure-button pure-button-primary "
+  br /
+  h3 Delete time record
+  = link_to "Delete", time_record_path(@record.id), method: :delete, data: {:confirm => 'Are you sure?'}, class: "pure-button pure-button-error"
