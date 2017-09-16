@@ -36,35 +36,61 @@
     table.pure-table-bordered.pure-table.table-wrap-report
       thead
         tr
-          th Prj.
+          th Project
+          - if @avl_nakamas.length > 1
+            th &nbsp;
           - 7.times do |i|
             - cdate = (@week_start + i.days)
             - cols << cdate.day
             th = l cdate, format: "%e"
           th ∑
           - cols << :sum
+          - if @avl_nakamas.length > 1
+            th &nbsp;
       tbody
         - @avl_projects.each do |project|
           - if @weekly_report_data[project.id]
             tr
               td = project.title
+              - if @avl_nakamas.length > 1
+                td
+                  - @avl_nakamas.each do |nakama|
+                    - if @weekly_report_data[project.id][:nakamas].include? nakama.id
+                      .report-worktimer: span.das-nakama = "@#{nakama.name}"
               - cols.each do |coln|
                 td
                   - if @weekly_report_data[project.id][coln]
                     - @avl_nakamas.each do |nakama|
                       - if @weekly_report_data[project.id][:nakamas].include? nakama.id
                         .report-worktimer
-                            = render 'active_worktimer', nakama: nakama, minutes: @weekly_report_data[project.id][coln][nakama.id]
+                          - if @weekly_report_data[project.id][coln][nakama.id]
+                            = formatted_worktime @weekly_report_data[project.id][coln][nakama.id]
+              - if @avl_nakamas.length > 1
+                td
+                  - @avl_nakamas.each do |nakama|
+                    - if @weekly_report_data[project.id][:nakamas].include? nakama.id
+                      .report-worktimer: span.das-nakama = "@#{nakama.name}"
       tfoot
         tr
           td ∑
+          - if @avl_nakamas.length > 1
+            td
+              - @avl_nakamas.each do |nakama|
+                - if @weekly_report_data[:all][:nakamas].include? nakama.id
+                  .report-worktimer: span.das-nakama = "@#{nakama.name}"
           - cols.each do |coln|
             td
               - if @weekly_report_data[:all][coln]
                 - @avl_nakamas.each do |nakama|
                   - if @weekly_report_data[:all][:nakamas].include? nakama.id
                     .report-worktimer
-                      = render 'active_worktimer', nakama: nakama, minutes: @weekly_report_data[:all][coln][nakama.id]
+                      - if @weekly_report_data[:all][coln][nakama.id]
+                        = formatted_worktime @weekly_report_data[:all][coln][nakama.id]
+          - if @avl_nakamas.length > 1
+            td
+              - @avl_nakamas.each do |nakama|
+                - if @weekly_report_data[:all][:nakamas].include? nakama.id
+                  .report-worktimer: span.das-nakama = "@#{nakama.name}"
 
 - if @records.any?
   .holder

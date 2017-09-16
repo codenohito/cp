@@ -24,8 +24,11 @@
   justify-content: center;
 }
 .report-worktimer {
+  padding: 3px 0;
   height: 18px;
-  & + .report-worktimer { margin-top: 6px; }
+  & + .report-worktimer {
+    border-top: 1px solid #efefef;
+  }
 }
 .inactive-worktimer {
   color: #707070;
