@@ -7,10 +7,10 @@
   }
 }
 .report-filter {
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 }
 .report-filter .pure-button {
-  margin-top: 20px;
+  margin-top: 24px;
 }
 .pure-table-responsive-wrap {
   margin-bottom: 20px;
@@ -38,4 +38,13 @@
 .summury-report-item {
   display: inline-block;
   margin-right: 25px;
+}
+
+.report-sums-by-nakamas {
+  margin: 20px 0 24px;
+  .report-nakama-sum {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 24px;
+  }
 }

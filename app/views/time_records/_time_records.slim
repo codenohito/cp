@@ -1,0 +1,7 @@
+.time-records
+  - cur_day = nil
+  - records.each do |record|
+    - unless record.theday == cur_day
+      .time-records-day = l record.theday, format: "%d %B %Y"
+      - cur_day = record.theday
+    = render 'time_record', record: record

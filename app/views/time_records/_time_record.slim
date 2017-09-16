@@ -1,0 +1,12 @@
+.time-record
+  span.edit-record-wrap
+    = link_to "✎", edit_time_record_path(record), class: "pure-button"
+  span.tr-info-time = formatted_worktime record.amount
+  - if can? :change_nakama, record
+    span.tr-info-nakama.das-nakama
+      | @
+      = record.nakama.name
+      '
+  ' at
+  span.tr-info-project = link_to record.project.title, project_path(record.project)
+  .tr-info-comment = record.comment

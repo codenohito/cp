@@ -1,5 +1,5 @@
 .holder
-  h1 Time report
+  h1 Time records
 
   = form_tag time_records_path, method: 'get', :class => 'pure-form pure-form-stacked report-filter'
     fieldset
@@ -19,18 +19,23 @@
           = label_tag 'to_day'
           = date_field_tag 'to_day', @filter[:to_day], :class => 'pure-u-23-24'
       button.pure-button.pure-button-primary type="submit" Apply!
+      '
+      = link_to 'Reset', time_records_path, :class => 'pure-button pure-button-secondary'
 
-  .table-report-wrap.pure-table-responsive-wrap
-    table.pure-table-bordered.pure-table
-      thead
-        tr
-          th Projects
-          - @avl_nakamas.each do |nakama|
-            th.das-nakama = "@#{nakama.name}"
-      tbody
+  h2 Summary
+  .report-sums-by-nakamas
+    - @avl_nakamas.each do |nakama|
+      .report-nakama-sum
+        .das-nakama = "@#{nakama.name}"
         - @avl_projects.each do |project|
-          tr
-            td = project.title
-            - @avl_nakamas.each do |nakama|
-              td class=((nakama.time_records.where(project: project).where('time_records.theday >= ? AND time_records.theday <= ?', @filter[:from_day], @filter[:to_day]).sum(:amount) == 0) ? 'inactive-worktimer' : 'active-worktimer')
-                = formatted_worktime nakama.time_records.where(project: project).where('time_records.theday >= ? AND time_records.theday <= ?', @filter[:from_day], @filter[:to_day]).sum(:amount)
+          - if @sums_by_nakama_projects[nakama.id][project.id]
+            div
+              = project.title
+              ' :
+              = formatted_worktime @sums_by_nakama_projects[nakama.id][project.id]
+
+  h2 Records
+  - if @records.any?
+    = render 'time_records', records: @records
+  - else
+    p Have no records
