@@ -62,24 +62,18 @@ class TimeRecordsController < ApplicationController
                               @week_start,
                               @week_start + 6.days)
 
-    @sums_by_nakamas = []
-    @avl_nakamas.each { |nkm| @sums_by_nakamas[nkm.id] = 0 }
-
-    @weekly_report_data = []
+    @weekly_report_data = {}
 
     @records.each do |record|
-      @sums_by_nakamas[record.nakama_id] += record.amount
-      unless @weekly_report_data[record.project_id]
-        @weekly_report_data[record.project_id] = {}
-      end
-      daystr = record.theday.strftime "%Y%m%d"
-      unless @weekly_report_data[record.project_id][daystr]
-        @weekly_report_data[record.project_id][daystr] = []
-      end
-      if @weekly_report_data[record.project_id][daystr][record.nakama_id]
-        @weekly_report_data[record.project_id][daystr][record.nakama_id] += record.amount
+      prjid = record.project_id
+      nkmid = record.nakama_id
+      dayn = record.theday.day
+      @weekly_report_data[prjid] = {} unless @weekly_report_data[prjid]
+      @weekly_report_data[prjid][dayn] = {} unless @weekly_report_data[prjid][dayn]
+      if @weekly_report_data[prjid][dayn][nkmid]
+        @weekly_report_data[prjid][dayn][nkmid] += record.amount
       else
-        @weekly_report_data[record.project_id][daystr][record.nakama_id] = record.amount
+        @weekly_report_data[prjid][dayn][nkmid] = record.amount
       end
     end
   end

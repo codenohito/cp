@@ -30,69 +30,49 @@
       '
       = link_to 'Reset', time_records_weekly_path, :class => 'pure-button pure-button-secondary'
 
-  h2 Summary
-  p
-    - @avl_nakamas.each do |nakama|
-      span.summury-report-item
-        span.das-nakama = "@#{nakama.name}"
-        | :&nbsp;
-        = formatted_worktime @sums_by_nakamas[nakama.id]
-
-
-// TODO rework table with @weekly_report_data
-
-- sum_by_nakama = {}
-- @avl_nakamas.each { |nakama| sum_by_nakama[nakama.id] = 0 }
 .holder-full-width
   .pure-table-responsive-wrap
     table.pure-table-bordered.pure-table.table-wrap-report
-      - result_sums = {}
+      - results_by_columns = {}
       thead
         tr
           th Prj.
           - 7.times do |i|
             - cell_day = @week_start + i.days
+            - results_by_columns[cell_day.day] = {}
             th = l cell_day, format: "%e"
-            - result_sums[cell_day.day] = {}
-            - @avl_nakamas.each { |nakama| result_sums[cell_day.day][nakama.id] = 0 }
+          th ∑
       tbody
         - @avl_projects.each do |project|
-          tr
-            td = project.title
-            - records = project.time_records.where(nakama: @avl_nakamas).where('theday >= ? AND theday <= ?', @week_start, @week_start + 6.days).order(theday: :asc)
-            - rndx = 0
-            - 7.times do |i|
-              - cell_day = @week_start + i.days
-              - cell_data = {}
-              - @avl_nakamas.each { |nakama| cell_data[nakama.id] = 0 }
+          - if @weekly_report_data[project.id]
+            - results_for_row = {}
+            tr
+              td = project.title
+              - 7.times do |i|
+                - dayn = (@week_start + i.days).day
+                td
+                  - if @weekly_report_data[project.id][dayn]
+                    - @avl_nakamas.each do |nakama|
+                      - if na = @weekly_report_data[project.id][dayn][nakama.id]
+                        = render 'active_worktimer', nakama: nakama, minutes: na
+                        - results_for_row[nakama.id] = (results_for_row[nakama.id] || 0) + na
+                        - results_by_columns[dayn][nakama.id] = (results_by_columns[dayn][nakama.id] || 0) + na
               td
-                - while records[rndx] && records[rndx].theday == cell_day
-                  - cell_data[records[rndx].nakama_id] += records[rndx].amount
-                  - result_sums[cell_day.day][records[rndx].nakama_id] += records[rndx].amount
-                  - sum_by_nakama[records[rndx].nakama_id] += records[rndx].amount
-                  - rndx += 1
                 - @avl_nakamas.each do |nakama|
-                  p class=((cell_data[nakama.id] == 0) ? 'inactive-worktimer' : 'active-worktimer')
-                    span.das-nakama = "@#{nakama.name}"
-                    | :&nbsp;
-                    = formatted_worktime cell_data[nakama.id]
+                  - if results_for_row[nakama.id]
+                    = render 'active_worktimer', nakama: nakama, minutes: results_for_row[nakama.id]
       tfoot
+        - results_for_row = {}
         tr
-          td Sum:
+          td ∑
           - 7.times do |i|
-            - cell_day = @week_start + i.days
+            - dayn = (@week_start + i.days).day
             td
               - @avl_nakamas.each do |nakama|
-                p class=((result_sums[cell_day.day][nakama.id] == 0) ? 'inactive-worktimer' : 'active-worktimer')
-                  span.das-nakama = "@#{nakama.name}"
-                  | :&nbsp;
-                  = formatted_worktime result_sums[cell_day.day][nakama.id]
-.holder
-  .summury-report-wrap
-    p
-      b Summary:
-    - @avl_nakamas.each do |nakama|
-      span.summury-report-item
-        span.das-nakama = "@#{nakama.name}"
-        | :&nbsp;
-        = formatted_worktime sum_by_nakama[nakama.id]
+                - if na = results_by_columns[dayn][nakama.id]
+                  = render 'active_worktimer', nakama: nakama, minutes: na
+                  - results_for_row[nakama.id] = (results_for_row[nakama.id] || 0) + na
+          td
+            - @avl_nakamas.each do |nakama|
+              - if results_for_row[nakama.id]
+                = render 'active_worktimer', nakama: nakama, minutes: results_for_row[nakama.id]
