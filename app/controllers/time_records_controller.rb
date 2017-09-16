@@ -62,19 +62,43 @@ class TimeRecordsController < ApplicationController
                               @week_start,
                               @week_start + 6.days)
 
-    @weekly_report_data = {}
+    @weekly_report_data = { all: { nakamas: [], sum: {} } }
 
     @records.each do |record|
       prjid = record.project_id
       nkmid = record.nakama_id
       dayn = record.theday.day
-      @weekly_report_data[prjid] = {} unless @weekly_report_data[prjid]
-      @weekly_report_data[prjid][dayn] = {} unless @weekly_report_data[prjid][dayn]
-      if @weekly_report_data[prjid][dayn][nkmid]
-        @weekly_report_data[prjid][dayn][nkmid] += record.amount
-      else
-        @weekly_report_data[prjid][dayn][nkmid] = record.amount
+      unless @weekly_report_data[prjid]
+        @weekly_report_data[prjid] = { nakamas: [], sum: {} }
       end
+      unless @weekly_report_data[prjid][:nakamas].include?(nkmid)
+        @weekly_report_data[prjid][:nakamas] << nkmid
+        unless @weekly_report_data[:all][:nakamas].include?(nkmid)
+          @weekly_report_data[:all][:nakamas] << nkmid
+        end
+      end
+      unless @weekly_report_data[prjid][dayn]
+        @weekly_report_data[prjid][dayn] = {}
+        unless @weekly_report_data[:all][dayn]
+          @weekly_report_data[:all][dayn] = {}
+        end
+      end
+      unless @weekly_report_data[prjid][dayn][nkmid]
+        @weekly_report_data[prjid][dayn][nkmid] = 0
+        unless @weekly_report_data[prjid][:sum][nkmid]
+          @weekly_report_data[prjid][:sum][nkmid] = 0
+        end
+        unless @weekly_report_data[:all][dayn][nkmid]
+          @weekly_report_data[:all][dayn][nkmid] = 0
+        end
+        unless @weekly_report_data[:all][:sum][nkmid]
+          @weekly_report_data[:all][:sum][nkmid] = 0
+        end
+      end
+      @weekly_report_data[prjid][dayn][nkmid] += record.amount
+      @weekly_report_data[prjid][:sum][nkmid] += record.amount
+      @weekly_report_data[:all][dayn][nkmid] += record.amount
+      @weekly_report_data[:all][:sum][nkmid] += record.amount
     end
   end
 

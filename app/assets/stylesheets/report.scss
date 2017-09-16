@@ -23,6 +23,10 @@
   display: flex;
   justify-content: center;
 }
+.report-worktimer {
+  height: 18px;
+  & + .report-worktimer { margin-top: 6px; }
+}
 .inactive-worktimer {
   color: #707070;
   .das-nakama {
@@ -31,7 +35,6 @@
 }
 .active-worktimer {
   color: #000;
-  & + .active-worktimer { margin-top: 6px; }
 }
 .summury-report-wrap {
   margin: 40px 0;

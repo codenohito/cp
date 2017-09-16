@@ -32,47 +32,41 @@
 
 .holder-full-width
   .pure-table-responsive-wrap
+    - cols = []
     table.pure-table-bordered.pure-table.table-wrap-report
-      - results_by_columns = {}
       thead
         tr
           th Prj.
           - 7.times do |i|
-            - cell_day = @week_start + i.days
-            - results_by_columns[cell_day.day] = {}
-            th = l cell_day, format: "%e"
+            - cdate = (@week_start + i.days)
+            - cols << cdate.day
+            th = l cdate, format: "%e"
           th ∑
+          - cols << :sum
       tbody
         - @avl_projects.each do |project|
           - if @weekly_report_data[project.id]
-            - results_for_row = {}
             tr
               td = project.title
-              - 7.times do |i|
-                - dayn = (@week_start + i.days).day
+              - cols.each do |coln|
                 td
-                  - if @weekly_report_data[project.id][dayn]
+                  - if @weekly_report_data[project.id][coln]
                     - @avl_nakamas.each do |nakama|
-                      - if na = @weekly_report_data[project.id][dayn][nakama.id]
-                        = render 'active_worktimer', nakama: nakama, minutes: na
-                        - results_for_row[nakama.id] = (results_for_row[nakama.id] || 0) + na
-                        - results_by_columns[dayn][nakama.id] = (results_by_columns[dayn][nakama.id] || 0) + na
-              td
-                - @avl_nakamas.each do |nakama|
-                  - if results_for_row[nakama.id]
-                    = render 'active_worktimer', nakama: nakama, minutes: results_for_row[nakama.id]
+                      - if @weekly_report_data[project.id][:nakamas].include? nakama.id
+                        .report-worktimer
+                            = render 'active_worktimer', nakama: nakama, minutes: @weekly_report_data[project.id][coln][nakama.id]
       tfoot
-        - results_for_row = {}
         tr
           td ∑
-          - 7.times do |i|
-            - dayn = (@week_start + i.days).day
+          - cols.each do |coln|
             td
-              - @avl_nakamas.each do |nakama|
-                - if na = results_by_columns[dayn][nakama.id]
-                  = render 'active_worktimer', nakama: nakama, minutes: na
-                  - results_for_row[nakama.id] = (results_for_row[nakama.id] || 0) + na
-          td
-            - @avl_nakamas.each do |nakama|
-              - if results_for_row[nakama.id]
-                = render 'active_worktimer', nakama: nakama, minutes: results_for_row[nakama.id]
+              - if @weekly_report_data[:all][coln]
+                - @avl_nakamas.each do |nakama|
+                  - if @weekly_report_data[:all][:nakamas].include? nakama.id
+                    .report-worktimer
+                      = render 'active_worktimer', nakama: nakama, minutes: @weekly_report_data[:all][coln][nakama.id]
+
+- if @records.any?
+  .holder
+    h2 Records
+    = render 'time_records', records: @records
