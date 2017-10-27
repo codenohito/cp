@@ -11,7 +11,8 @@ class Timer extends Component {
       time: '',
       offset: null,
       interval: null,
-      isPause: true
+      isPause: true,
+      isBlind: false
     };
 
     this.play = this.play.bind(this);
@@ -19,6 +20,7 @@ class Timer extends Component {
     this.finish = this.finish.bind(this);
     this.reset = this.reset.bind(this);
     this.buttonPlay = this.buttonPlay.bind(this);
+    this.blind = this.blind.bind(this);
   }
 
   componentDidMount() {
@@ -91,7 +93,7 @@ class Timer extends Component {
     let time = SecondsTohhmmss(clock / 1000)
     this.setState({time: time })
 
-    document.title = this.state.time;
+    document.title = this.state.blind ? "BLIND" : this.state.time;
   }
 
   calculateOffset() {
@@ -136,6 +138,11 @@ class Timer extends Component {
       this.props.onPauseActiveTimer()
     }
 
+  }
+
+  blind() {
+    document.title = !this.state.blind ? "BLIND" : this.state.time;
+    this.setState({blind: !this.state.blind }) 
   }
 
   buttonPlay() {
@@ -185,12 +192,14 @@ class Timer extends Component {
               <p className="react-timer-comment">{this.props.comment}</p>
             </div>
             <div className="pure-u-2-3 timer-block">
-              <h3 className="seconds">{this.state.time}</h3>
+              <h3 className="seconds">{this.state.blind ? "BLIND" : this.state.time}</h3>
               <br />
               <div className="timer-button-group">
                 <button onClick={this.pause} className="pure-button">pause</button>
                 <button onClick={this.buttonPlay}
                         className="pure-button is-button-active">play</button>
+                      <button onClick={this.blind}
+                        className="pure-button">blind</button>
                 <button onClick={this.finish} className="pure-button timer-button-finish" >finish</button>
               </div>
             </div>
