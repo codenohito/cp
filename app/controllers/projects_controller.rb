@@ -29,8 +29,9 @@ class ProjectsController < ApplicationController
     if current_user.moneyman?
       @result = {
         cost: 0.0,
+        add_wastes: @project.additional_wastes.to_f,
+        wastes: 0.0,
         income: @project.plan_income.to_f,
-        wastes: @project.additional_wastes.to_f,
         profit: 0.0,
         profit_perc: 0.0
       }
@@ -54,7 +55,8 @@ class ProjectsController < ApplicationController
         { nakama: nakama, cost: cost, amount: amount, sum: sum }
       end
 
-      @result[:profit] = @result[:income] - @result[:wastes] - @result[:cost]
+      @result[:wastes] = @result[:cost] + @result[:add_wastes]
+      @result[:profit] = @result[:income] - @result[:wastes]
       unless @result[:income] == 0
         @result[:profit_perc] = @result[:profit] / (@result[:income] / 100)
       end
