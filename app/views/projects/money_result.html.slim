@@ -1,0 +1,35 @@
+.holder
+  h1 = @project.name
+  - sum_of_all = 0.0
+  h2 Nakamas work
+  - @nakamas_data.each do |ndata|
+    - if ndata[:amount] && ndata[:amount] > 0
+      p
+        span.das-nakama = "@" + ndata[:nakama].name
+        br
+        ' Cost per hour:
+        = ndata[:cost]
+        br
+        ' Time amount:
+        = formatted_worktime ndata[:amount]
+        br
+        ' Sum:
+        = "%.2f" % ndata[:sum]
+
+  h2 Result
+  p
+    ' Sum of all the costs:
+    = "%.2f" % @result[:cost]
+  p
+    ' Additional wastes:
+    = "%.2f" % @result[:wastes]
+  p
+    ' Real income:
+    = "%.2f" % @result[:income]
+  p
+    ' Profit:
+    = "%.2f" % @result[:profit]
+    - unless @result[:profit_perc] == 0
+      | (~
+      = "%.2f" % @result[:profit_perc]
+      | %)

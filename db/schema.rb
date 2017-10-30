@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170810095948) do
+ActiveRecord::Schema.define(version: 20171030083914) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,12 +38,25 @@ ActiveRecord::Schema.define(version: 20170810095948) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "payment_rates", force: :cascade do |t|
+    t.bigint "nakama_id", null: false
+    t.bigint "project_id"
+    t.float "hour_rate", null: false
+    t.float "hour_cost", null: false
+    t.datetime "active_from", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["nakama_id"], name: "index_payment_rates_on_nakama_id"
+    t.index ["project_id"], name: "index_payment_rates_on_project_id"
+  end
+
   create_table "projects", force: :cascade do |t|
     t.bigint "cluster_id"
     t.string "name"
     t.text "descr"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "options"
     t.index ["cluster_id"], name: "index_projects_on_cluster_id"
   end
 
@@ -90,6 +103,8 @@ ActiveRecord::Schema.define(version: 20170810095948) do
   end
 
   add_foreign_key "history_records", "clusters"
+  add_foreign_key "payment_rates", "nakamas"
+  add_foreign_key "payment_rates", "projects"
   add_foreign_key "projects", "clusters"
   add_foreign_key "time_records", "nakamas"
   add_foreign_key "time_records", "projects"

@@ -14,7 +14,11 @@ Rails.application.routes.draw do
     get    '/',          to: 'timers#index', as: :timers
   end
 
-  resources :projects, except: [:edit, :update]
+  resources :projects, except: [:edit] do
+    member do
+      get 'money-result', to: 'projects#money_result', as: :money_result
+    end
+  end
 
   root to: 'pages#dashboard'
 end

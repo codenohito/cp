@@ -11,6 +11,23 @@
         strong = l record.moment, format: moment_format_str
         == @markdown.render record.body
 
+  - if current_user.moneyman?
+    h2 Paydata
+    p = link_to "Show result for now", money_result_project_path(@project)
+    = form_for @project do |f|
+      p
+        = f.label :time_estim
+        = f.number_field :time_estim
+      p
+        = f.label :plan_income
+        = f.number_field :plan_income
+      p
+        = f.label :additional_wastes
+        = f.number_field :additional_wastes
+      p
+        = f.submit
+
+
   / p &nbsp;
   / p Warning! Danger zone!
   / = link_to 'Destroy', project_path(@project),

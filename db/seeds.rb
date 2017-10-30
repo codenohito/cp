@@ -23,6 +23,12 @@ nakamas = Nakama.create!([
   { name: "summer" }
 ])
 
+PaymentRate.create!([
+  { nakama: nakamas[0], hour_rate: 42.0, hour_cost: 46.4, active_from: Date.yesterday() },
+  { nakama: nakamas[1], hour_rate: 10.0, hour_cost: 12.2, active_from: Date.yesterday() },
+  { nakama: nakamas[2], hour_rate: 22.0, hour_cost: 25.0, active_from: Date.yesterday() },
+])
+
 clusters = Cluster.create!([
   { name: "Codenohito", descr: 'Internal tasks of our team' },
   { name: "Svezhov", descr: 'Website of «Свежов» company' }
